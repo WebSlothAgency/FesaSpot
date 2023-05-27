@@ -10,6 +10,7 @@ module.exports = {
       colors:{
         "lightGray": "#F2F4F7",
         "darkGray": "#EAECF0",
+        "promotionColor": "#FF7347"
       }
     },
   },
