@@ -5,23 +5,31 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //PAGES
 import Home from './screens/Home';
-import EventPage from './screens/EventPage';
+import EventDetailPage from './screens/EventDetailPage';
+
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+const client = new ApolloClient({
+  uri: 'https://api-us-east-1-shared-usea1-02.hygraph.com/v2/clhvznxbz10sb01tbempl16ux/master',
+  cache: new InMemoryCache()
+});
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{ headerShown: false }}
-        />
+    <ApolloProvider client={client}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen name="Event" component={EventPage} options={{headerShown: false}} />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen name="Event" component={EventDetailPage} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ApolloProvider>
   );
 }

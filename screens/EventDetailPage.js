@@ -3,12 +3,13 @@ import { StyleSheet, SafeAreaView, ScrollView, Text, View, Image } from 'react-n
 import Svg, { Circle, Rect, Path } from 'react-native-svg';
 import { StatusBar } from 'expo-status-bar';
 import { StatusBar as SB } from 'react-native';
+import MapView from 'react-native-maps';
 
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import EventDescriptionTag from '../components/EventDescriptionTag';
 
-export default function EventPage() {
+export default function EventDetailPage() {
 
     const [navbarState, setNavbarState] = useState("event")
 
@@ -28,7 +29,7 @@ export default function EventPage() {
 
                 {/* CONTENT VIEW */}
                 <ScrollView className="bg-white h-full p-4">
-                    <View className="w-full flex flex-col gap-6 pb-32 h-fit">
+                    <View className="w-full flex flex-col pb-32 h-fit">
                         <View className="flex w-full flex-row">
                             <View className="h-[175px] aspect-[3/4] overflow-hidden flex justify-center items-center rounded-lg bg-white">
                                 <Image className="w-full h-full" source={{ uri: "https://media.graphassets.com/feXV9zSfRvK41w8jMs9w" }}></Image>
@@ -43,13 +44,13 @@ export default function EventPage() {
                                 </View>
 
                                 <View className="flex flex-col mt-1 w-7/12">
-                                    <Text className="text-xl font-bold">Een hele lange naam voor een festival</Text>
+                                    <Text className="text-xl font-bold">Friday Night</Text>
                                     <Text className="mt-2">26 Mei 2023 (22h) · Sky Lounge & Bar</Text>
                                 </View>
                             </View>
                         </View>
 
-                        <View className="bg-white border-2 border-darkGray p-4 w-full h-fit rounded-lg">
+                        <View className="bg-white border-2 border-darkGray p-4 w-full h-fit rounded-lg mt-6">
                             <Text className="font-bold">Beschriiving</Text>
                             <Text className="mt-4">70's, 80's, 90's & Early 2000's Music. Free entrance until 23h30!Come well dressed 🤵</Text>
                             <ScrollView horizontal className="flex flex-row gap-2 mt-4">
@@ -60,7 +61,7 @@ export default function EventPage() {
                             </ScrollView>
                         </View>
 
-                        <View>
+                        <View className="mt-6">
                             <Text className="text-gray-700">Date</Text>
                             <View className="flex flex-col mt-2">
                                 <Text className="font-semibold text-gray-700">26 Mei 2023 (22:00 - 06:00)</Text>
@@ -68,24 +69,31 @@ export default function EventPage() {
                             </View>
                         </View>
 
-                        <View>
+                        <View className="mt-6">
                             <Text className="text-gray-700">Organizer</Text>
                             <View className="flex flex-col mt-2">
                                 <Text className="font-semibold text-gray-700">Sky Lounge</Text>
                             </View>
                         </View>
 
-                        <View>
+                        <View className="mt-6">
                             <Text className="text-gray-700">Artists</Text>
                             <View className="flex flex-col mt-2">
                                 <Text className="font-semibold text-gray-700">DJ MARIO · DJ CAT</Text>
                             </View>
                         </View>
 
-                        <View>
+                        <View className="mt-6">
                             <Text className="text-gray-700">Location</Text>
-                            <View className="flex flex-col mt-2">
-                                
+                            <View className="flex flex-col mt-2 w-full  border-2 border-gray-100 rounded-xl overflow-hidden">
+                                <MapView className="aspect-video w-full"
+                                    initialRegion={{
+                                        longitude: -55.15748012241371,
+                                        latitude: 5.824250798907734,
+                                        latitudeDelta: 0.0025,
+                                        longitudeDelta: 0.0025
+                                    }}
+                                />
                             </View>
                         </View>
                     </View>
