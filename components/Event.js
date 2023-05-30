@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 const Event = ({ data }) => {
     let navigation = useNavigation()
     return (
-        <TouchableOpacity onPress={() => navigation.navigate('Event', { name: 'Event' })} className="mt-3">
+        <TouchableOpacity onPress={() => navigation.navigate('Event', { eventID: data.id })} className="mt-3">
             <View className="w-full border-2 p-4 border-gray-200 rounded-2xl h-fit">
                 <View className="flex w-full flex-row">
                     <View className="h-[96px] aspect-[3/4] overflow-hidden flex justify-center items-center rounded-lg bg-white">
@@ -18,7 +18,7 @@ const Event = ({ data }) => {
                     <View className="h-fit w-full">
                         <View className="flex flex-col w-9/12 px-2 gap-1">
                             <Text className="text-xl font-bold">{data.title}</Text>
-                            <Text>{new Date(data.startDate).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' })} • Paramaribo</Text>
+                            <Text>{new Date(data.startDate).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' })} • {data.locationDisplayName}</Text>
                             <Text className="italic text-xs">{data.beschrijving.text.replace(/\\n/g, "")}</Text>
                         </View>
                     </View>

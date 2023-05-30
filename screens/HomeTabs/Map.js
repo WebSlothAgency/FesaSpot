@@ -94,7 +94,7 @@ const Map = () => {
                     {!loading && eventsCalendar.map(marker => {
                         return <Marker key={Math.random()} coordinate={{ latitude: formatNumberWithRandomDecimal(marker.location.longitude), longitude: formatNumberWithRandomDecimal(marker.location.latitude) }}
                             pinColor={"red"}>
-                            <Callout onPress={() => navigation.navigate("Event")}>
+                            <Callout onPress={() => navigation.navigate("Event", {eventID: marker.id})}>
                                 <View className="flex flex-row gap-2">
                                     {Platform.OS != "android" && <Image className="w-10 aspect-[3/4] rounded-md" source={{ uri: marker.banner }}></Image>}
                                     <View>
@@ -103,7 +103,7 @@ const Map = () => {
                                         <Text>Sluit: {marker.closeTime}</Text>
                                     </View>
                                 </View>
-                                <TouchableOpacity onPress={() => navigation.navigate("Event")} className={"mt-2 w-full bg-black rounded-md"}>
+                                <TouchableOpacity onPress={() => navigation.navigate("Event", {eventID: marker.id})} className={"mt-2 w-full bg-black rounded-md"}>
                                     <Text className="text-center py-1 font-bold text-white">MEER INFO</Text>
                                 </TouchableOpacity>
                             </Callout>
