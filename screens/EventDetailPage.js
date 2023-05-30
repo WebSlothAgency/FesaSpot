@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, Text, View, Image, RefreshControl, TouchableOpacity } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, Text, View, Image, RefreshControl, TouchableOpacity, Linking } from 'react-native';
 import Svg, { Circle, Rect, Path } from 'react-native-svg';
 import { StatusBar } from 'expo-status-bar';
 import { StatusBar as SB, ActivityIndicator } from 'react-native';
@@ -10,7 +10,13 @@ import NavBar from '../components/NavBar';
 import EventDescriptionTag from '../components/EventDescriptionTag';
 import { gql, useQuery } from '@apollo/client';
 
+//contexts
+import { EventStorageContext } from '../contexts/EventStorageContext';
+import { useContext } from 'react';
+
 export default function EventDetailPage({ route }) {
+    const { savedEventIds, saveEventId, removeEventId } = useContext(EventStorageContext);
+
     const [navbarState, setNavbarState] = useState("event")
     let { eventID } = route.params
 
@@ -40,6 +46,8 @@ export default function EventDetailPage({ route }) {
           promoted
           sponsors
           startDate
+          tickets
+          website
           pricing
           title
           locationDisplayName
@@ -84,24 +92,49 @@ export default function EventDetailPage({ route }) {
         }
     };
 
+    function openWebsite(url){
+        Linking.openURL(url)
+    }
+
     function parseDate(dateString) {
         const date = new Date(dateString);
 
-        const options = {
-            day: 'numeric',
-            month: 'long',
-            hour: '2-digit',
-            minute: '2-digit',
-        };
+        const day = date.getDate();
+        const monthIndex = date.getMonth();
+        const month = [
+            'jan',
+            'feb',
+            'mrt',
+            'apr',
+            'mei',
+            'jun',
+            'jul',
+            'aug',
+            'sep',
+            'okt',
+            'nov',
+            'dec',
+        ][monthIndex];
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
 
-        const formattedDate = date.toLocaleDateString('nl-NL', options);
-        const [day, month, om, time] = formattedDate.split(' ');
+        const formattedDate = `${day} ${month.toLowerCase()} (${hours.toString().padStart(2, '0')}:${minutes
+            .toString()
+            .padStart(2, '0')})`;
 
-        return `${day} ${month} (${time})`;
+        return formattedDate;
     }
 
     function replaceNewlinesWithEnters(text) {
         return text.replace(/\\n/g, '\n');
+    }
+
+    function saveEvent(evID) {
+        if (savedEventIds.includes(evID)) {
+            removeEventId(evID)
+        } else {
+            saveEventId(evID)
+        }
     }
 
 
@@ -140,24 +173,40 @@ export default function EventDetailPage({ route }) {
                             </View>
                         </View>
 
-                        <View className="w-full mt-6 flex flex-row justify-between items-center">
-                            <TouchableOpacity className="w-9/12 h-10 rounded-full flex flex-row justify-center items-center bg-white border-2 border-gray-300 py-2">
+                        <View className="w-full mt-6 flex flex-row justify-end items-center">
+                            {(eventData.tickets) && <TouchableOpacity onPress={() => openWebsite(eventData.tickets)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-2 border-gray-300 py-2">
                                 <Svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <Path d="M1 11H21M1 11C1 16.5228 5.47715 21 11 21M1 11C1 5.47715 5.47715 1 11 1M21 11C21 16.5228 16.5228 21 11 21M21 11C21 5.47715 16.5228 1 11 1M11 1C13.5013 3.73835 14.9228 7.29203 15 11C14.9228 14.708 13.5013 18.2616 11 21M11 1C8.49872 3.73835 7.07725 7.29203 7 11C7.07725 14.708 8.49872 18.2616 11 21" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </Svg>
                                 <Text className="ml-2 font-semibold">Koop je Tickets</Text>
-                            </TouchableOpacity>
-                            <View className="flex flex-row gap-2 w-3/12">
+                            </TouchableOpacity>}
+                            {(!eventData.tickets && eventData.website) && <TouchableOpacity onPress={() => openWebsite(eventData.website)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-2 border-gray-300 py-2">
+                                <Svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <Path d="M1 11H21M1 11C1 16.5228 5.47715 21 11 21M1 11C1 5.47715 5.47715 1 11 1M21 11C21 16.5228 16.5228 21 11 21M21 11C21 5.47715 16.5228 1 11 1M11 1C13.5013 3.73835 14.9228 7.29203 15 11C14.9228 14.708 13.5013 18.2616 11 21M11 1C8.49872 3.73835 7.07725 7.29203 7 11C7.07725 14.708 8.49872 18.2616 11 21" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </Svg>
+                                <Text className="ml-2 font-semibold">Website van Organisator</Text>
+                            </TouchableOpacity>}
+                            {(!eventData.tickets && !eventData.website) && <TouchableOpacity onPress={() => openWebsite(`https://www.events.sr/${
+                                
+                            }`)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-2 border-gray-300 py-2">
+                                <Svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <Path d="M1 11H21M1 11C1 16.5228 5.47715 21 11 21M1 11C1 5.47715 5.47715 1 11 1M21 11C21 16.5228 16.5228 21 11 21M21 11C21 5.47715 16.5228 1 11 1M11 1C13.5013 3.73835 14.9228 7.29203 15 11C14.9228 14.708 13.5013 18.2616 11 21M11 1C8.49872 3.73835 7.07725 7.29203 7 11C7.07725 14.708 8.49872 18.2616 11 21" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </Svg>
+                                <Text className="ml-2 font-semibold">Website Bezoeken</Text>
+                            </TouchableOpacity>}
+                            <View className="flex flex-row gap-2 w-fit ml-0.5">
                                 <TouchableOpacity className="h-10 w-10 flex items-center justify-center rounded-full bg-white border-2 border-gray-300">
                                     <Svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <Path d="M19 10V14.2C19 15.8802 19 16.7202 18.673 17.362C18.3854 17.9265 17.9265 18.3854 17.362 18.673C16.7202 19 15.8802 19 14.2 19H5.8C4.11984 19 3.27976 19 2.63803 18.673C2.07354 18.3854 1.6146 17.9265 1.32698 17.362C1 16.7202 1 15.8802 1 14.2V10M14 5L10 1M10 1L6 5M10 1V13" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </Svg>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity className="h-10 w-10 flex items-center justify-center rounded-full bg-white border-2 border-gray-300">
-                                    <Svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <TouchableOpacity onPress={() => saveEvent(eventData.id)} className="h-10 w-10 flex items-center justify-center rounded-full bg-white border-2 border-gray-300">
+                                    {savedEventIds.includes(eventData.id) ? <Svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <Path d="M1 5.8C1 4.11984 1 3.27976 1.32698 2.63803C1.6146 2.07354 2.07354 1.6146 2.63803 1.32698C3.27976 1 4.11984 1 5.8 1H10.2C11.8802 1 12.7202 1 13.362 1.32698C13.9265 1.6146 14.3854 2.07354 14.673 2.63803C15 3.27976 15 4.11984 15 5.8V19L8 15L1 19V5.8Z" fill="#121926" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    </Svg> : <Svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <Path d="M1 5.8C1 4.11984 1 3.27976 1.32698 2.63803C1.6146 2.07354 2.07354 1.6146 2.63803 1.32698C3.27976 1 4.11984 1 5.8 1H10.2C11.8802 1 12.7202 1 13.362 1.32698C13.9265 1.6146 14.3854 2.07354 14.673 2.63803C15 3.27976 15 4.11984 15 5.8V19L8 15L1 19V5.8Z" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </Svg>
+                                    </Svg>}
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -167,8 +216,8 @@ export default function EventDetailPage({ route }) {
                                 <Text className="font-semibold">Beschrijving</Text>
                                 <Text className="mt-2">{replaceNewlinesWithEnters(eventData.beschrijving.text)}</Text>
                                 {eventData.tags.length > 0 && <ScrollView horizontal className="flex flex-row gap-2 mt-3">
-                                    {eventData.tags.map(tag => {
-                                        return <EventDescriptionTag key={Math.random()} text={tag.tag} />
+                                    {eventData.tags.map((tag, i) => {
+                                        return <EventDescriptionTag key={`tag-${i}`} text={tag.tag} />
                                     })}
                                 </ScrollView>}
                             </View>
@@ -220,9 +269,9 @@ export default function EventDetailPage({ route }) {
                                     <Text className="font-semibold">Q&A</Text>
                                 </TouchableOpacity>
                                 <View className={"mt-2 " + (showQA ? "h-fit" : "h-0")}>
-                                    {eventData.qa.map(sub => {
+                                    {eventData.qa.map((sub, i) => {
                                         return (
-                                            <View key={Math.random()} className="mt-4">
+                                            <View key={`sub-${i}`} className="mt-4">
                                                 <Text className="italic text-gray-500">{sub.question}</Text>
                                                 <Text className="mt-1">{sub.answer}</Text>
                                             </View>
@@ -242,7 +291,7 @@ export default function EventDetailPage({ route }) {
                                         latitudeDelta: 0.01,
                                         longitudeDelta: 0.01
                                     }}>
-                                    <Marker key={Math.random()} coordinate={{ latitude: eventData.locatie.latitude, longitude: eventData.locatie.longitude }}
+                                    <Marker coordinate={{ latitude: eventData.locatie.latitude, longitude: eventData.locatie.longitude }}
                                         pinColor={"red"}></Marker>
                                 </MapView>
                             </View>

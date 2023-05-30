@@ -44,8 +44,6 @@ export const Events = () => {
             setRefreshing(true);
             let newData = await refetch();
             await groupEventsByMonth(newData.data)
-        } catch (error) {
-            console.log('Error refreshing data:', error);
         } finally {
             setRefreshing(false);
         }
@@ -81,10 +79,10 @@ export const Events = () => {
             <View className="w-full flex flex-col gap-4 mt-0 pb-32 h-fit">
                 {eventsCalendar.map(eventMonth => {
                     return (
-                        <View key={Math.random()} className="w-full flex flex-col">
+                        <View key={`events-${eventMonth.Month}`} className="w-full flex flex-col">
                             <Text className="text-2xl font-bold">{eventMonth.Month}</Text>
-                            {eventMonth.events.map(event => {
-                                return <Event key={Math.random()} data={event} />
+                            {eventMonth.events.map((event, i) => {
+                                return <Event key={`${eventMonth}-event-${i}`} data={event} />
                             })}
                         </View>
                     )

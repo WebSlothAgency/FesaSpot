@@ -91,8 +91,8 @@ const Map = () => {
                     }}
                 >
 
-                    {!loading && eventsCalendar.map(marker => {
-                        return <Marker key={Math.random()} coordinate={{ latitude: formatNumberWithRandomDecimal(marker.location.longitude), longitude: formatNumberWithRandomDecimal(marker.location.latitude) }}
+                    {!loading && eventsCalendar.map((marker, i) => {
+                        return <Marker key={`marker-${i}`} coordinate={{ latitude: formatNumberWithRandomDecimal(marker.location.longitude), longitude: formatNumberWithRandomDecimal(marker.location.latitude) }}
                             pinColor={"red"}>
                             <Callout onPress={() => navigation.navigate("Event", {eventID: marker.id})}>
                                 <View className="flex flex-row gap-2">

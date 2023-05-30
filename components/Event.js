@@ -7,8 +7,19 @@ import { useNavigation } from '@react-navigation/native';
 
 const Event = ({ data }) => {
     let navigation = useNavigation()
+
+    function isCurrentDateOlderThan(targetDate) {
+        const currentDate = new Date();
+        const targetDateTime = new Date(targetDate);
+
+        return currentDate > targetDateTime;
+    }
+
+    let opacity = "mt-3 " + (isCurrentDateOlderThan(data.endDate) ? "opacity-50" : "")
+
+
     return (
-        <TouchableOpacity onPress={() => navigation.navigate('Event', { eventID: data.id })} className="mt-3">
+        <TouchableOpacity onPress={() => navigation.navigate('Event', { eventID: data.id })} className={opacity}>
             <View className="w-full border-2 p-4 border-gray-200 rounded-2xl h-fit">
                 <View className="flex w-full flex-row">
                     <View className="h-[96px] aspect-[3/4] overflow-hidden flex justify-center items-center rounded-lg bg-white">
