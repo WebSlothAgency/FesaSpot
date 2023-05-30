@@ -22,6 +22,9 @@ const Saved = () => {
                 url
               }
               title
+              tags(first: 100) {
+                tag
+              }
               startDate
               endDate
               beschrijving {

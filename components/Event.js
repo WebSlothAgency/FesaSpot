@@ -4,6 +4,7 @@ import { StatusBar as SB, TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, View, SafeAreaView, Linking, ScrollView, Image, Platform } from 'react-native';
 import Svg, { Circle, Rect, Path } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
+import EventDescriptionTag from './EventDescriptionTag';
 
 const Event = ({ data }) => {
     let navigation = useNavigation()
@@ -29,6 +30,11 @@ const Event = ({ data }) => {
                     <View className="h-fit w-full">
                         <View className="flex flex-col w-9/12 px-2 gap-1">
                             <Text className="text-xl font-bold">{data.title}</Text>
+                            {data.tags.length > 0 && <View className="flex flex-row">
+                                <EventDescriptionTag randomColor text={data.tags[0].tag} />
+                                {data.tags[1] && <EventDescriptionTag randomColor text={data.tags[1].tag} /> }
+                                {data.tags.length >= 3 && <EventDescriptionTag randomColor text={`+${data.tags.length - 2}`} />}
+                            </View>}
                             <Text>{new Date(data.startDate).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' })} • {data.locationDisplayName}</Text>
                             <Text className="italic text-xs">{data.beschrijving.text.replace(/\\n/g, "")}</Text>
                         </View>

@@ -1,10 +1,26 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 
-const EventDescriptionTag = ({text}) => {
+const EventDescriptionTag = ({ text, randomColor = false }) => {
+
+    let randomNum = Math.floor(Math.random() * 6)
+    let bg = ["#F4F3FF", "#EFF8FF", "#FDF2FA", "#FEF6EE", "#ECFDF3", "#FEF3F2"]
+    let border = ["#D9D6FE", "#B2DDFF", "#FCCEEE", "#F9DBAF", "#ABEFC6", "#FECDCA"]
+    let txt = ["#5925DC", "#175CD3", "#C11574", "#B93815", "#067647", "#B42318"]
+
+    const styles = StyleSheet.create({
+        container: {
+            backgroundColor: bg[randomNum],
+            borderColor: border[randomNum] 
+        },
+        text:{
+            color: txt[randomNum]
+        }
+    });
+    
     return (
-        <View className="w-fit mx-1 px-2 py-0.5 bg-gray-50 border-2 border-gray-300 rounded-full">
-            <Text className="text-gray-500 font-medium">{text}</Text>
+        <View style={randomColor && styles.container} className="w-fit mx-1 px-2 py-0.5 border-2 border-gray-300 rounded-full">
+            <Text style={randomColor && styles.text} className="text-gray-500 font-medium">{text}</Text>
         </View>
     )
 }

@@ -186,9 +186,7 @@ export default function EventDetailPage({ route }) {
                                 </Svg>
                                 <Text className="ml-2 font-semibold">Website van Organisator</Text>
                             </TouchableOpacity>}
-                            {(!eventData.tickets && !eventData.website) && <TouchableOpacity onPress={() => openWebsite(`https://www.events.sr/${
-                                
-                            }`)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-2 border-gray-300 py-2">
+                            {(!eventData.tickets && !eventData.website) && <TouchableOpacity onPress={() => openWebsite(`https://www.events.sr/${eventData.id}`)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-2 border-gray-300 py-2">
                                 <Svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <Path d="M1 11H21M1 11C1 16.5228 5.47715 21 11 21M1 11C1 5.47715 5.47715 1 11 1M21 11C21 16.5228 16.5228 21 11 21M21 11C21 5.47715 16.5228 1 11 1M11 1C13.5013 3.73835 14.9228 7.29203 15 11C14.9228 14.708 13.5013 18.2616 11 21M11 1C8.49872 3.73835 7.07725 7.29203 7 11C7.07725 14.708 8.49872 18.2616 11 21" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </Svg>

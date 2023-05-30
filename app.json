@@ -21,10 +21,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.websloth.eventssr"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ed6472d4-0e84-4f7b-8dc4-675abd4e6324"
+      }
+    },
+    "owner": "siddhart04"
   }
 }

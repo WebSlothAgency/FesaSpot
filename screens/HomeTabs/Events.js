@@ -21,6 +21,9 @@ export const Events = () => {
         ) {
           id
           title
+          tags(first: 100) {
+            tag
+          }
           startDate
           endDate
           banner {
