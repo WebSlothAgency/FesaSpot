@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, RefreshControl } from 'react-native'
+import { View, Text, ScrollView, RefreshControl, ActivityIndicator } from 'react-native'
 import { useState, useEffect, useContext } from 'react';
 import { EventStorageContext } from '../../contexts/EventStorageContext';
 import Event from '../../components/Event';
@@ -27,6 +27,7 @@ const Saved = () => {
               }
               startDate
               endDate
+              locationDisplayName
               beschrijving {
                 text
               }
@@ -78,9 +79,18 @@ const Saved = () => {
         seteventsCalendar(old => groupedEvents)
     }
 
+
+
+    if (loading || !eventsCalendar) {
+        return (<View className="w-full h-full flex items-center justify-center">
+            <ActivityIndicator size="small" color="#000000" />
+        </View>)
+    }
+
     return (<>
         {savedEventIds.length > 0 ? <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} className="bg-white h-full px-4">
             <View className="w-full flex flex-col gap-4 mt-0 pb-32 h-fit">
+                {/* <Text className="text-2xl font-bold">Opgeslagen Events</Text> */}
                 {eventsCalendar.map(eventMonth => {
                     return (
                         <View key={`saved-events-${eventMonth.Month}`} className="w-full flex flex-col">

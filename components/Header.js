@@ -4,7 +4,7 @@ import Svg, {Path} from 'react-native-svg';
 
 const Header = () => {
     return (
-        <View className="h-[60px] flex flex-row justify-between items-center px-4 bg-white border-b-2 border-gray-200 w-full top-0 sticky">
+        <View className="h-[60px] flex flex-row justify-between items-center px-4 bg-white border-b-0.5 border-gray-200 w-full top-0 sticky">
             <Text className="text-xl font-black">Events.SR</Text>
             <View className="flex flex-row gap-4">
                 {/* FILTERS */}

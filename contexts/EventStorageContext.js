@@ -17,9 +17,7 @@ const EventStorageProvider = ({ children }) => {
             if (savedIds !== null) {
                 setSavedEventIds(JSON.parse(savedIds));
             }
-        } catch (error) {
-            console.log('Error loading saved event IDs:', error);
-        }
+        } catch { }
     };
 
     const saveEventId = async (eventId) => {
@@ -31,20 +29,16 @@ const EventStorageProvider = ({ children }) => {
             const updatedIds = [...savedEventIds, eventId];
             setSavedEventIds(updatedIds);
             await AsyncStorage.setItem('savedEventIds', JSON.stringify(updatedIds));
-        } catch (error) {
-            console.log('Error saving event ID:', error);
-        }
+        } catch { }
     };
 
     const removeEventId = async (eventId) => {
         try {
-          const updatedIds = savedEventIds.filter((id) => id !== eventId);
-          setSavedEventIds(updatedIds);
-          await AsyncStorage.setItem('savedEventIds', JSON.stringify(updatedIds));
-        } catch (error) {
-          console.log('Error removing event ID:', error);
-        }
-      };
+            const updatedIds = savedEventIds.filter((id) => id !== eventId);
+            setSavedEventIds(updatedIds);
+            await AsyncStorage.setItem('savedEventIds', JSON.stringify(updatedIds));
+        } catch { }
+    };
 
     return (
         <EventStorageContext.Provider

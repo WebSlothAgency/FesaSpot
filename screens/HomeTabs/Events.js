@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { ScrollView, View, Text, RefreshControl } from 'react-native'
+import { ScrollView, View, Text, RefreshControl, ActivityIndicator } from 'react-native'
 import Event from '../../components/Event'
 
 import { useQuery } from '@apollo/client';
 import { gql } from "@apollo/client";
 
-const currentDateTime = new Date().toISOString();
+
+const currentDate = new Date();
+currentDate.setDate(currentDate.getDate() - 3);
+
+const formattedDate = currentDate.toISOString();
 
 export const Events = () => {
     const [eventsCalendar, seteventsCalendar] = useState([])
@@ -17,7 +21,7 @@ export const Events = () => {
         events(
           first: 200
           orderBy: startDate_ASC
-          where: {endDate_gt: "2023-01-21T00:00:00.000Z"}
+          where: {endDate_gt: "${formattedDate}"}
         ) {
           id
           title
@@ -26,6 +30,7 @@ export const Events = () => {
           }
           startDate
           endDate
+          locationDisplayName
           banner {
             url
           }
@@ -75,6 +80,12 @@ export const Events = () => {
         }, []);
 
         seteventsCalendar(old => groupedEvents)
+    }
+
+    if (loading || !eventsCalendar) {
+        return (<View className="w-full h-full flex items-center justify-center">
+            <ActivityIndicator size="small" color="#000000" />
+        </View>)
     }
 
     return (

@@ -15,11 +15,14 @@ const EventDescriptionTag = ({ text, randomColor = false }) => {
         },
         text:{
             color: txt[randomNum]
+        },
+        defaultContainer:{
+            borderColor: "rgb(209, 213, 219)"
         }
     });
     
     return (
-        <View style={randomColor && styles.container} className="w-fit mx-1 px-2 py-0.5 border-2 border-gray-300 rounded-full">
+        <View style={randomColor ? styles.container : styles.defaultContainer} className="w-fit mx-1 px-2 py-0.5 border-0.5 rounded-full">
             <Text style={randomColor && styles.text} className="text-gray-500 font-medium">{text}</Text>
         </View>
     )

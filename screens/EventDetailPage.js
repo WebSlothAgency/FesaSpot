@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, Text, View, Image, RefreshControl, TouchableOpacity, Linking } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, Text, View, Image, RefreshControl, TouchableOpacity, Linking, Share } from 'react-native';
 import Svg, { Circle, Rect, Path } from 'react-native-svg';
 import { StatusBar } from 'expo-status-bar';
 import { StatusBar as SB, ActivityIndicator } from 'react-native';
@@ -92,7 +92,7 @@ export default function EventDetailPage({ route }) {
         }
     };
 
-    function openWebsite(url){
+    function openWebsite(url) {
         Linking.openURL(url)
     }
 
@@ -137,6 +137,16 @@ export default function EventDetailPage({ route }) {
         }
     }
 
+    async function share() {
+        try {
+            await Share.share({
+                url: eventData.banner.url,
+                message:
+                    `${eventData.title}\n${parseDate(eventData.startDate)} - ${parseDate(eventData.endDate)}\n${replaceNewlinesWithEnters(eventData.beschrijving.text)}`
+            });
+        } catch { }
+    }
+
 
     if (loading || !eventData) {
         return (<View className="w-full h-full flex items-center justify-center">
@@ -154,7 +164,7 @@ export default function EventDetailPage({ route }) {
                 <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} className="bg-white h-full p-4">
                     <View className="w-full flex flex-col pb-32 h-fit">
                         <View className="flex w-full flex-row">
-                            <View className="h-[175px] aspect-[3/4] overflow-hidden flex justify-center items-center rounded-lg bg-white border-2 border-gray-300">
+                            <View className="h-[175px] aspect-[3/4] overflow-hidden flex justify-center items-center rounded-lg bg-white border-0.5 border-gray-300">
                                 <Image className="w-full h-full" source={{ uri: eventData.banner.url }}></Image>
                             </View>
 
@@ -174,32 +184,32 @@ export default function EventDetailPage({ route }) {
                         </View>
 
                         <View className="w-full mt-6 flex flex-row justify-end items-center">
-                            {(eventData.tickets) && <TouchableOpacity onPress={() => openWebsite(eventData.tickets)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-2 border-gray-300 py-2">
+                            {(eventData.tickets) && <TouchableOpacity onPress={() => openWebsite(eventData.tickets)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-0.5 border-gray-300 py-2">
                                 <Svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <Path d="M1 11H21M1 11C1 16.5228 5.47715 21 11 21M1 11C1 5.47715 5.47715 1 11 1M21 11C21 16.5228 16.5228 21 11 21M21 11C21 5.47715 16.5228 1 11 1M11 1C13.5013 3.73835 14.9228 7.29203 15 11C14.9228 14.708 13.5013 18.2616 11 21M11 1C8.49872 3.73835 7.07725 7.29203 7 11C7.07725 14.708 8.49872 18.2616 11 21" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </Svg>
                                 <Text className="ml-2 font-semibold">Koop je Tickets</Text>
                             </TouchableOpacity>}
-                            {(!eventData.tickets && eventData.website) && <TouchableOpacity onPress={() => openWebsite(eventData.website)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-2 border-gray-300 py-2">
+                            {(!eventData.tickets && eventData.website) && <TouchableOpacity onPress={() => openWebsite(eventData.website)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-0.5 border-gray-300 py-2">
                                 <Svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <Path d="M1 11H21M1 11C1 16.5228 5.47715 21 11 21M1 11C1 5.47715 5.47715 1 11 1M21 11C21 16.5228 16.5228 21 11 21M21 11C21 5.47715 16.5228 1 11 1M11 1C13.5013 3.73835 14.9228 7.29203 15 11C14.9228 14.708 13.5013 18.2616 11 21M11 1C8.49872 3.73835 7.07725 7.29203 7 11C7.07725 14.708 8.49872 18.2616 11 21" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </Svg>
                                 <Text className="ml-2 font-semibold">Website van Organisator</Text>
                             </TouchableOpacity>}
-                            {(!eventData.tickets && !eventData.website) && <TouchableOpacity onPress={() => openWebsite(`https://www.events.sr/${eventData.id}`)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-2 border-gray-300 py-2">
+                            {(!eventData.tickets && !eventData.website) && <TouchableOpacity onPress={() => openWebsite(`https://www.events.sr/${eventData.id}`)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-0.5 border-gray-300 py-2">
                                 <Svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <Path d="M1 11H21M1 11C1 16.5228 5.47715 21 11 21M1 11C1 5.47715 5.47715 1 11 1M21 11C21 16.5228 16.5228 21 11 21M21 11C21 5.47715 16.5228 1 11 1M11 1C13.5013 3.73835 14.9228 7.29203 15 11C14.9228 14.708 13.5013 18.2616 11 21M11 1C8.49872 3.73835 7.07725 7.29203 7 11C7.07725 14.708 8.49872 18.2616 11 21" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </Svg>
                                 <Text className="ml-2 font-semibold">Website Bezoeken</Text>
                             </TouchableOpacity>}
                             <View className="flex flex-row gap-2 w-fit ml-0.5">
-                                <TouchableOpacity className="h-10 w-10 flex items-center justify-center rounded-full bg-white border-2 border-gray-300">
+                                <TouchableOpacity onPress={() => share()} className="h-10 w-10 flex items-center justify-center rounded-full bg-white border-0.5 border-gray-300">
                                     <Svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <Path d="M19 10V14.2C19 15.8802 19 16.7202 18.673 17.362C18.3854 17.9265 17.9265 18.3854 17.362 18.673C16.7202 19 15.8802 19 14.2 19H5.8C4.11984 19 3.27976 19 2.63803 18.673C2.07354 18.3854 1.6146 17.9265 1.32698 17.362C1 16.7202 1 15.8802 1 14.2V10M14 5L10 1M10 1L6 5M10 1V13" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </Svg>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity onPress={() => saveEvent(eventData.id)} className="h-10 w-10 flex items-center justify-center rounded-full bg-white border-2 border-gray-300">
+                                <TouchableOpacity onPress={() => saveEvent(eventData.id)} className="h-10 w-10 flex items-center justify-center rounded-full bg-white border-0.5 border-gray-300">
                                     {savedEventIds.includes(eventData.id) ? <Svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <Path d="M1 5.8C1 4.11984 1 3.27976 1.32698 2.63803C1.6146 2.07354 2.07354 1.6146 2.63803 1.32698C3.27976 1 4.11984 1 5.8 1H10.2C11.8802 1 12.7202 1 13.362 1.32698C13.9265 1.6146 14.3854 2.07354 14.673 2.63803C15 3.27976 15 4.11984 15 5.8V19L8 15L1 19V5.8Z" fill="#121926" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </Svg> : <Svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -281,7 +291,7 @@ export default function EventDetailPage({ route }) {
 
                         <View className="mt-6">
                             <Text className="font-semibold text-gray-700">Locatie</Text>
-                            <View className="flex flex-col mt-2 w-full  border-2 border-gray-100 rounded-xl overflow-hidden">
+                            <View className="flex flex-col mt-2 w-full  border-0.5 border-gray-300 rounded-xl overflow-hidden">
                                 <MapView className="aspect-video w-full"
                                     initialRegion={{
                                         longitude: eventData.locatie.longitude,

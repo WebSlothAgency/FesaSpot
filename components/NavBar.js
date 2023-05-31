@@ -7,8 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 const NavBar = ({ navbarState, setNavbarState, event = false }) => {
     let navigation = useNavigation()
 
-    let selected = "bg-lightGray border-2 border-darkGray flex items-center justify-center w-10 h-10 rounded-full"
-    let unselected = "bg-white border-2 border-white flex items-center justify-center w-10 h-10 rounded-full"
+    let selected = "bg-lightGray border-0.5 border-darkGray flex items-center justify-center w-10 h-10 rounded-full"
+    let unselected = "bg-white border-0.5 border-white flex items-center justify-center w-10 h-10 rounded-full"
 
     let buttonStyle = `w-1/3 h-[${Platform.OS === "android" ? "60px" : "500px"}] flex items-center justify-center`
 
@@ -23,7 +23,7 @@ const NavBar = ({ navbarState, setNavbarState, event = false }) => {
         container: {
             width: "100%",
             backgroundColor: "white",
-            borderTopWidth: 2,
+            borderTopWidth: 1,
             borderColor: "#EAECF0",
             display: 'flex',
             flexDirection: 'row',

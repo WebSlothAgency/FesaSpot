@@ -16,12 +16,17 @@ const Event = ({ data }) => {
         return currentDate > targetDateTime;
     }
 
-    let opacity = "mt-3 " + (isCurrentDateOlderThan(data.endDate) ? "opacity-50" : "")
+    let opacity = "mt-3 " + (isCurrentDateOlderThan(data.endDate) ? "opacity-60" : "")
 
+    function sortByTagLength(arr) {
+        return arr.sort((a, b) => a.tag.length - b.tag.length);
+    }
+
+    let tags = sortByTagLength([...data.tags])
 
     return (
         <TouchableOpacity onPress={() => navigation.navigate('Event', { eventID: data.id })} className={opacity}>
-            <View className="w-full border-2 p-4 border-gray-200 rounded-2xl h-fit">
+            <View className="w-full border-0.5 p-4 border-gray-200 rounded-2xl h-fit">
                 <View className="flex w-full flex-row">
                     <View className="h-[96px] aspect-[3/4] overflow-hidden flex justify-center items-center rounded-lg bg-white">
                         <Image className="w-full h-full" source={{ uri: data.banner.url }}></Image>
@@ -30,10 +35,10 @@ const Event = ({ data }) => {
                     <View className="h-fit w-full">
                         <View className="flex flex-col w-9/12 px-2 gap-1">
                             <Text className="text-xl font-bold">{data.title}</Text>
-                            {data.tags.length > 0 && <View className="flex flex-row">
-                                <EventDescriptionTag randomColor text={data.tags[0].tag} />
-                                {data.tags[1] && <EventDescriptionTag randomColor text={data.tags[1].tag} /> }
-                                {data.tags.length >= 3 && <EventDescriptionTag randomColor text={`+${data.tags.length - 2}`} />}
+                            {tags.length > 0 && <View className="flex flex-row">
+                                <EventDescriptionTag randomColor text={tags[0].tag} />
+                                {/* {tags[1] && <EventDescriptionTag randomColor text={tags[1].tag} />} */}
+                                {tags.length >= 3 && <EventDescriptionTag randomColor text={`+${tags.length - 1}`} />}
                             </View>}
                             <Text>{new Date(data.startDate).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' })} • {data.locationDisplayName}</Text>
                             <Text className="italic text-xs">{data.beschrijving.text.replace(/\\n/g, "")}</Text>
