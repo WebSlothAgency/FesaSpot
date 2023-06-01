@@ -29,7 +29,7 @@ const Home = ({ route }) => {
         <View className="w-full">
             <SafeAreaView style={styles.container}>
                 <StatusBar style="dark" />
-                <Header />
+                <Header tag={navbarState} />
 
                 {/* CONTENT VIEW */}
                 {navbarState == "calendar" && <Events />}

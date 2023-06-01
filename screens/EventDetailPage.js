@@ -140,7 +140,7 @@ export default function EventDetailPage({ route }) {
     async function share() {
         try {
             await Share.share({
-                url: eventData.banner.url,
+                url: `https://eventssr.netlify.app/event/${eventData.id}`,
                 message:
                     `${eventData.title}\n${parseDate(eventData.startDate)} - ${parseDate(eventData.endDate)}\n${replaceNewlinesWithEnters(eventData.beschrijving.text)}`
             });

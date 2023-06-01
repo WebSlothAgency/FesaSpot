@@ -33,6 +33,12 @@ const Map = () => {
           }
         }`);
 
+    function isCurrentTimeBetween(startDateTime, endDateTime) {
+        const currentDateTime = new Date();
+
+        return currentDateTime >= startDateTime && currentDateTime <= endDateTime;
+    }
+
     useEffect(() => {
         if (loading) return
         let eventsArray = []
@@ -41,10 +47,11 @@ const Map = () => {
             eventsArray.push({
                 title: event.title,
                 id: event.id,
+                opened: isCurrentTimeBetween(event.startDate, event.endDate),
                 openTime: parseDate(event.startDate),
                 closeTime: parseDate(event.endDate),
                 banner: event.banner.url,
-                location:{
+                location: {
                     longitude: event.locatie.latitude,
                     latitude: event.locatie.longitude
                 }
@@ -93,8 +100,8 @@ const Map = () => {
 
                     {!loading && eventsCalendar.map((marker, i) => {
                         return <Marker key={`marker-${i}`} coordinate={{ latitude: formatNumberWithRandomDecimal(marker.location.longitude), longitude: formatNumberWithRandomDecimal(marker.location.latitude) }}
-                            pinColor={"red"}>
-                            <Callout onPress={() => navigation.navigate("Event", {eventID: marker.id})}>
+                            pinColor={marker.opened ? "green" : "red"}>
+                            <Callout onPress={() => navigation.navigate("Event", { eventID: marker.id })}>
                                 <View className="flex flex-row gap-2">
                                     {Platform.OS != "android" && <Image className="w-10 aspect-[3/4] rounded-md" source={{ uri: marker.banner }}></Image>}
                                     <View>
@@ -103,7 +110,7 @@ const Map = () => {
                                         <Text>Sluit: {marker.closeTime}</Text>
                                     </View>
                                 </View>
-                                <TouchableOpacity onPress={() => navigation.navigate("Event", {eventID: marker.id})} className={"mt-2 w-full bg-black rounded-md"}>
+                                <TouchableOpacity onPress={() => navigation.navigate("Event", { eventID: marker.id })} className={"mt-2 w-full bg-black rounded-md"}>
                                     <Text className="text-center py-1 font-bold text-white">MEER INFO</Text>
                                 </TouchableOpacity>
                             </Callout>
