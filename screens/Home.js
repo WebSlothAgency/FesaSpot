@@ -12,6 +12,8 @@ import Saved from './HomeTabs/Saved';
 
 const Home = ({ route }) => {
     const [navbarState, setNavbarState] = useState("calendar")
+    const [selectedDate, setSelectedDate] = useState(new Date())
+    const [showCalendar, setShowCalendar] = useState(false)
 
     useEffect(() => {
         if (route.params && route.params.tag) setNavbarState(route.params.tag)
@@ -29,15 +31,15 @@ const Home = ({ route }) => {
         <View className="w-full">
             <SafeAreaView style={styles.container}>
                 <StatusBar style="dark" />
-                <Header tag={navbarState} />
+                <Header selectedDate={selectedDate} setShowCalendar={setShowCalendar} showCalendar={showCalendar} tag={navbarState} />
 
                 {/* CONTENT VIEW */}
                 {navbarState == "calendar" && <Events />}
-                {navbarState == "map" && <Map />}
+                {navbarState == "map" && <Map showCalendar={showCalendar} setShowCalendar={setShowCalendar} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />}
                 {navbarState == "saved" && <Saved />}
             </SafeAreaView>
 
-            <NavBar navbarState={navbarState} setNavbarState={setNavbarState} />
+            <NavBar navbarState={navbarState} setNavbarState={setNavbarState} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
         </View>
     )
 }

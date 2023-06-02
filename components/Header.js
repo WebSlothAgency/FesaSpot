@@ -1,12 +1,39 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Text, View } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
+import { Button, Text, TouchableOpacity, View } from 'react-native';
 
-const Header = ({tag}) => {
+const Header = ({ tag, selectedDate, setShowCalendar, showCalendar }) => {
+
+    const parseDateString = (dateString) => {
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const monthIndex = date.getMonth();
+        const year = date.getFullYear();
+
+        const months = [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'Mei',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Okt',
+            'Nov',
+            'Dec',
+        ];
+
+        const month = months[monthIndex];
+
+        return `${day} ${month}, ${year}`;
+    };
+
     return (
-        <View className="h-[60px] flex flex-row justify-between items-center px-4 bg-white border-b-0.5 border-gray-200 w-full top-0 sticky">
-            <Text className="text-xl font-black">Events.SR</Text>
-            {/* <View className="flex flex-row gap-4">
+        <>
+            <View className="h-[60px] flex flex-row justify-between items-center px-4 bg-white border-b-0.5 border-gray-200 w-full top-0 sticky">
+                <Text className="text-xl font-black">Events.SR</Text>
+                {/* <View className="flex flex-row gap-4">
                 <Svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <Path d="M6 12H18M3 6H21M9 18H15" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </Svg>
@@ -16,10 +43,11 @@ const Header = ({tag}) => {
                 </Svg>
             </View> */}
 
-            {tag == "map" && <View>
-                <Text>awd</Text>
-            </View>}
-        </View >
+                {tag == "map" && <View>
+                    <TouchableOpacity className="px-4 py-1 bg-gray-100 rounded-md" onPress={() => { setShowCalendar(!showCalendar) }}><Text className="text-xl">{parseDateString(selectedDate)}</Text></TouchableOpacity>
+                </View>}
+            </View >
+        </>
     )
 }
 
