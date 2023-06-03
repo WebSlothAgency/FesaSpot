@@ -33,5 +33,9 @@
       }
     },
     "owner": "siddhart04"
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-6142479111003129~8596062666",
+    "ios_app_id": "ca-app-pub-6142479111003129~2191749499"
   }
 }
