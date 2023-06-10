@@ -11,6 +11,7 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
     const navigation = useNavigation();
     const [selectedEvent, setselectedEvent] = useState();
     const [eventsCalendar, seteventsCalendar] = useState([]);
+    const [thisDate, setThisDate] = useState(new Date().toISOString())
 
     const fetchData = async () => {
         try {
@@ -42,12 +43,16 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
         fetchData();
     }, [selectedDate]);
 
+    let check = checkToday() ? `,{startDate_lte: "${thisDate}", endDate_gte: "${thisDate}"}` : ""
+
     const { loading, refetch } = useQuery(gql`
     query MyQuery{
       events(
         first: 200
         orderBy: startDate_ASC
-        where: { startDate_gte: "${selectedDate}", startDate_lte: "${new Date(new Date(selectedDate).setUTCHours(23, 59, 59, 0)).toISOString()}" }
+        where: { OR: [
+            {startDate_gte: "${selectedDate}", startDate_lte: "${new Date(new Date(selectedDate).setUTCHours(23, 59, 59, 0)).toISOString()}"}${check}
+        ] }
       ) {
         banner {
           url
@@ -61,17 +66,18 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
         endDate
         startDate
       }
+    }`);
+
+    function checkToday() {
+        let now = new Date().setHours(0, 0, 0, 0)
+        let selected = new Date(selectedDate).setHours(0, 0, 0, 0)
+
+        return now == selected
     }
-  `, {
-        variables: {
-            selectedDate,
-            sideselectedDate: new Date(new Date(selectedDate).setUTCHours(23, 59, 59, 0)).toISOString()
-        },
-    });
 
     function isCurrentTimeBetween(startDateTime, endDateTime) {
         const currentDateTime = new Date();
-        return currentDateTime >= startDateTime && currentDateTime <= endDateTime;
+        return currentDateTime.getTime() >= new Date(startDateTime).getTime() && currentDateTime.getTime() <= new Date(endDateTime).getTime();
     }
 
     function parseDate(dateString) {
@@ -120,7 +126,7 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
                 >
                     {!loading && eventsCalendar.map((marker, i) => (
                         <Marker key={`marker-${i}`} coordinate={{ latitude: formatNumberWithRandomDecimal(marker.location.longitude), longitude: formatNumberWithRandomDecimal(marker.location.latitude) }}
-                            pinColor={marker.opened ? "green" : "red"}>
+                            pinColor={marker.opened ? "limegreen" : "red"}>
                             <Callout onPress={() => navigation.navigate("Event", { eventID: marker.id })}>
                                 <View className="flex flex-row gap-2">
                                     {Platform.OS !== "android" && <Image className="w-10 aspect-[3/4] rounded-md" source={{ uri: marker.banner }}></Image>}

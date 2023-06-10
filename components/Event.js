@@ -16,7 +16,7 @@ const Event = ({ data }) => {
         return currentDate > targetDateTime;
     }
 
-    let opacity = "mt-3 " + (isCurrentDateOlderThan(data.endDate) ? "opacity-100" : "")
+    let opacity = "mt-3 " + (isCurrentDateOlderThan(data.endDate) ? "opacity-40" : "")
 
     function sortByTagLength(arr) {
         return arr.sort((a, b) => a.tag.length - b.tag.length);
