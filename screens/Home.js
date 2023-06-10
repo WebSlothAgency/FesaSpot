@@ -10,42 +10,10 @@ import { Events } from './HomeTabs/Events';
 import Map from './HomeTabs/Map';
 import Saved from './HomeTabs/Saved';
 
-import { BannerAd, BannerAdSize, TestIds, InterstitialAd, AdEventType, RewardedInterstitialAd, RewardedAdEventType } from 'react-native-google-mobile-ads';
-
-const interstitial = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, {
-    requestNonPersonalizedAdsOnly: true
-  });
-
 const Home = ({ route }) => {
     const [navbarState, setNavbarState] = useState("calendar")
-    const [selectedDate, setSelectedDate] = useState(new Date())
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
     const [showCalendar, setShowCalendar] = useState(false)
-
-    const [interstitialLoaded, setInterstitialLoaded] = useState(false);
-
-    const loadInterstitial = () => {
-        const unsubscribeLoaded = interstitial.addAdEventListener(
-            AdEventType.LOADED,
-            () => {
-                setInterstitialLoaded(true);
-            }
-        );
-
-        const unsubscribeClosed = interstitial.addAdEventListener(
-            AdEventType.CLOSED,
-            () => {
-                setInterstitialLoaded(false);
-                interstitial.load();
-            }
-        );
-
-        interstitial.load();
-
-        return () => {
-            unsubscribeClosed();
-            unsubscribeLoaded();
-        }
-    }
 
     useEffect(() => {
         if (route.params && route.params.tag) setNavbarState(route.params.tag)
@@ -59,21 +27,12 @@ const Home = ({ route }) => {
         },
     });
 
-    useEffect(() => {
-        const unsubscribeInterstitialEvents = loadInterstitial();
-
-        return () => {
-            unsubscribeInterstitialEvents();
-        };
-    }, [])
-
     return (
         <View className="w-full">
             <SafeAreaView style={styles.container}>
                 <StatusBar style="dark" />
                 <Header selectedDate={selectedDate} setShowCalendar={setShowCalendar} showCalendar={showCalendar} tag={navbarState} />
-
-                {interstitialLoaded ? <Button title="Show Interstitial" onPress={() => interstitial.show()} /> : <Text>Loading Interstitial...</Text>}
+                
                 {/* CONTENT VIEW */}
                 {navbarState == "calendar" && <Events />}
                 {navbarState == "map" && <Map showCalendar={showCalendar} setShowCalendar={setShowCalendar} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />}

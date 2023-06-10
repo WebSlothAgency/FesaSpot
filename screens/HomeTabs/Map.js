@@ -38,6 +38,7 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
     };
 
     useEffect(() => {
+        if (!selectedDate) return
         fetchData();
     }, [selectedDate]);
 
@@ -83,7 +84,10 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
         };
         const formattedDate = date.toLocaleDateString('nl-NL', options);
         const [day, month, om, time] = formattedDate.split(' ');
-        return `${day} ${month} (${time})`;
+
+        const hours = ('0' + date.getHours()).slice(-2);
+        const minutes = ('0' + date.getMinutes()).slice(-2);
+        return `${day} ${month} (${hours}:${minutes})`;
     }
 
     function formatNumberWithRandomDecimal(number) {
@@ -95,7 +99,7 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
 
     useEffect(() => {
         fetchData();
-    }, []); // Call fetchData initially
+    }, []);
 
     return (
         <View>

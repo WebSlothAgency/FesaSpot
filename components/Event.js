@@ -16,7 +16,7 @@ const Event = ({ data }) => {
         return currentDate > targetDateTime;
     }
 
-    let opacity = "mt-3 " + (isCurrentDateOlderThan(data.endDate) ? "opacity-60" : "")
+    let opacity = "mt-3 " + (isCurrentDateOlderThan(data.endDate) ? "opacity-100" : "")
 
     function sortByTagLength(arr) {
         return arr.sort((a, b) => a.tag.length - b.tag.length);
@@ -24,24 +24,61 @@ const Event = ({ data }) => {
 
     let tags = sortByTagLength([...data.tags])
 
+    function truncateText(text) {
+        const maxLength = Platform.OS == "android" ? 100 : 150;
+
+        // Split the text into sentences
+        let sentences = text.split(/[.!?]/);
+
+        // Remove any empty sentences
+        sentences = sentences.filter(sentence => sentence.trim() !== '');
+
+        let truncatedText = '';
+        let currentLength = 0;
+
+        // Iterate through the sentences until the maximum length is reached
+        for (let i = 0; i < sentences.length; i++) {
+            const sentence = sentences[i];
+            const sentenceLength = sentence.length;
+
+            // Check if adding the current sentence exceeds the maximum length
+            if (currentLength + sentenceLength <= maxLength) {
+                truncatedText += sentence.trim() + '. ';
+                currentLength += sentenceLength;
+
+                // Check if adding the current sentence exceeds the maximum length with ".."
+                if (currentLength + 2 > maxLength) {
+                    truncatedText += '..';
+                    break;
+                }
+            } else {
+                // If adding the current sentence exceeds the maximum length, truncate it and add ".."
+                const remainingLength = maxLength - currentLength;
+                truncatedText += sentence.substring(0, remainingLength).trim() + '..';
+                break;
+            }
+        }
+
+        return truncatedText.trim();
+    }
+
     return (
         <TouchableOpacity onPress={() => navigation.navigate('Event', { eventID: data.id })} className={opacity}>
-            <View className="w-full border-0.5 p-4 border-gray-200 rounded-2xl h-fit">
+            <View className="w-full border-0.5 p-4 border-gray-300 rounded-2xl h-fit">
                 <View className="flex w-full flex-row">
                     <View className="h-[96px] aspect-[3/4] overflow-hidden flex justify-center items-center rounded-lg bg-white">
                         <Image className="w-full h-full" source={{ uri: data.banner.url }}></Image>
                     </View>
 
-                    <View className="h-fit w-full">
+                    <View className="h-fit w-full ml-2">
                         <View className="flex flex-col w-9/12 px-2 gap-1">
-                            <Text className="text-xl font-bold">{data.title}</Text>
+                            <Text className="text-xl font-bold w-11/12">{data.title}</Text>
                             {tags.length > 0 && <View className="flex flex-row">
-                                <EventDescriptionTag randomColor text={tags[0].tag} />
-                                {/* {tags[1] && <EventDescriptionTag randomColor text={tags[1].tag} />} */}
-                                {tags.length >= 3 && <EventDescriptionTag randomColor text={`+${tags.length - 1}`} />}
+                                <EventDescriptionTag first={true} randomColor text={tags[0].tag} />
+                                {tags.length >= 2 && <EventDescriptionTag randomColor text={`+${tags.length - 1}`} />}
                             </View>}
                             <Text>{new Date(data.startDate).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' })} • {data.locationDisplayName}</Text>
-                            <Text className="italic text-xs">{data.beschrijving.text.replace(/\\n/g, "")}</Text>
+                            <Text className="italic text-xs truncate">{truncateText(data.beschrijving.text.replace(/\\n/g, ""))}</Text>
                         </View>
                     </View>
                 </View>

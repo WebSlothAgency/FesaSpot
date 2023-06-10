@@ -26,7 +26,6 @@ const CustomDatePicker = ({ selectedDate, setSelectedDate, setShowCalendar, show
                         previousTitle="<"
                         selectedStartDate={selectedDate}
                         nextTitle='>'
-                        minDate={new Date()}
                         startFromMonday={true}
                         weekdays={["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"]}
                         months={["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"]}

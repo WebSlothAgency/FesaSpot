@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, Text, View, Image, RefreshControl, TouchableOpacity, Linking, Share } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, Text, View, Image, RefreshControl, TouchableOpacity, Linking, Share, Platform } from 'react-native';
 import Svg, { Circle, Rect, Path } from 'react-native-svg';
 import { StatusBar } from 'expo-status-bar';
 import { StatusBar as SB, ActivityIndicator } from 'react-native';
@@ -10,9 +10,16 @@ import NavBar from '../components/NavBar';
 import EventDescriptionTag from '../components/EventDescriptionTag';
 import { gql, useQuery } from '@apollo/client';
 
+// import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+
 //contexts
 import { EventStorageContext } from '../contexts/EventStorageContext';
 import { useContext } from 'react';
+
+// const adUnitId = Platform.select({
+//     ios: 'ca-app-pub-6142479111003129/8992961562',
+//     android: 'ca-app-pub-6142479111003129/9184533255',
+// });
 
 export default function EventDetailPage({ route }) {
     const { savedEventIds, saveEventId, removeEventId } = useContext(EventStorageContext);
@@ -46,6 +53,7 @@ export default function EventDetailPage({ route }) {
           promoted
           sponsors
           startDate
+          adres
           tickets
           website
           pricing
@@ -102,25 +110,50 @@ export default function EventDetailPage({ route }) {
         const day = date.getDate();
         const monthIndex = date.getMonth();
         const month = [
-            'jan',
-            'feb',
-            'mrt',
-            'apr',
-            'mei',
-            'jun',
-            'jul',
-            'aug',
-            'sep',
-            'okt',
-            'nov',
-            'dec',
+            'Jan',
+            'Feb',
+            'Mrt',
+            'Apr',
+            'Mei',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Okt',
+            'Nov',
+            'Dec',
         ][monthIndex];
         const hours = date.getHours();
         const minutes = date.getMinutes();
 
-        const formattedDate = `${day} ${month.toLowerCase()} (${hours.toString().padStart(2, '0')}:${minutes
+        const formattedDate = `${day} ${month} (${hours.toString().padStart(2, '0')}:${minutes
             .toString()
             .padStart(2, '0')})`;
+
+        return formattedDate;
+    }
+
+    function parseTitleDate(dateString) {
+        const date = new Date(dateString);
+
+        const day = date.getDate();
+        const monthIndex = date.getMonth();
+        const month = [
+            'Jan',
+            'Feb',
+            'Mrt',
+            'Apr',
+            'Mei',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Okt',
+            'Nov',
+            'Dec',
+        ][monthIndex];
+
+        const formattedDate = `${day} ${month} ${date.getFullYear()}`;
 
         return formattedDate;
     }
@@ -178,7 +211,7 @@ export default function EventDetailPage({ route }) {
 
                                 <View className="flex flex-col mt-1 w-7/12">
                                     <Text className="text-xl font-bold">{eventData?.title}</Text>
-                                    <Text className="mt-2">26 Mei 2023 ({getHourFromDate(eventData?.startDate)}) · {eventData?.locationDisplayName}</Text>
+                                    <Text className="mt-2">{parseTitleDate(eventData?.startDate)} ({getHourFromDate(eventData?.startDate)}) · {eventData?.locationDisplayName}</Text>
                                 </View>
                             </View>
                         </View>
@@ -196,7 +229,7 @@ export default function EventDetailPage({ route }) {
                                 </Svg>
                                 <Text className="ml-2 font-semibold">Website van Organisator</Text>
                             </TouchableOpacity>}
-                            {(!eventData.tickets && !eventData.website) && <TouchableOpacity onPress={() => openWebsite(`https://www.events.sr/${eventData.id}`)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-0.5 border-gray-300 py-2">
+                            {(!eventData.tickets && !eventData.website) && <TouchableOpacity onPress={() => openWebsite(`https://www.fesaspot.sr/event/${eventData.id}`)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-0.5 border-gray-300 py-2">
                                 <Svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <Path d="M1 11H21M1 11C1 16.5228 5.47715 21 11 21M1 11C1 5.47715 5.47715 1 11 1M21 11C21 16.5228 16.5228 21 11 21M21 11C21 5.47715 16.5228 1 11 1M11 1C13.5013 3.73835 14.9228 7.29203 15 11C14.9228 14.708 13.5013 18.2616 11 21M11 1C8.49872 3.73835 7.07725 7.29203 7 11C7.07725 14.708 8.49872 18.2616 11 21" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </Svg>
@@ -218,6 +251,16 @@ export default function EventDetailPage({ route }) {
                                 </TouchableOpacity>
                             </View>
                         </View>
+
+                        {/* <View className="bg-white w-full flex flex-row justify-center mt-6">
+                            <BannerAd className="bg-white"
+                                unitId={adUnitId}
+                                size={BannerAdSize.LARGE_BANNER}
+                                requestOptions={{
+                                    requestNonPersonalizedAdsOnly: true,
+                                }}
+                            />
+                        </View> */}
 
                         <View className="bg-white border-0.5 border-gray-300 w-full h-fit rounded-lg mt-6 flex flex-col divide-y-0.5 divide-gray-300">
                             <View className="p-4">
@@ -290,8 +333,17 @@ export default function EventDetailPage({ route }) {
                         </View>
 
                         <View className="mt-6">
-                            <Text className="font-semibold text-gray-700">Locatie</Text>
-                            <View className="flex flex-col mt-2 w-full  border-0.5 border-gray-300 rounded-xl overflow-hidden">
+                            <Text className="font-semibold">Locatie</Text>
+                            {eventData.adres && <View className="pt-2">
+                                <View>
+                                    <Text className="font-semibold">Adres</Text>
+                                    <View className="flex flex-col mt-1">
+                                        <Text className="text-gray-700">{eventData.adres}</Text>
+                                    </View>
+                                </View>
+                            </View>}
+
+                            <View className="flex flex-col mt-4 w-full border-0.5 border-gray-300 rounded-xl overflow-hidden">
                                 <MapView className="aspect-video w-full"
                                     initialRegion={{
                                         longitude: eventData.locatie.longitude,
@@ -304,6 +356,16 @@ export default function EventDetailPage({ route }) {
                                 </MapView>
                             </View>
                         </View>
+
+                        {/* <View className="bg-white w-full flex flex-row justify-center mt-6">
+                            <BannerAd className="bg-white"
+                                unitId={adUnitId}
+                                size={BannerAdSize.BANNER}
+                                requestOptions={{
+                                    requestNonPersonalizedAdsOnly: true,
+                                }}
+                            />
+                        </View> */}
                     </View>
                 </ScrollView>
             </SafeAreaView>

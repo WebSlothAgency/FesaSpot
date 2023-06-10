@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
-const EventDescriptionTag = ({ text, randomColor = false }) => {
+const EventDescriptionTag = ({ text, randomColor = false, first = false }) => {
 
     let randomNum = Math.floor(Math.random() * 6)
     let bg = ["#F4F3FF", "#EFF8FF", "#FDF2FA", "#FEF6EE", "#ECFDF3", "#FEF3F2"]
@@ -22,7 +22,7 @@ const EventDescriptionTag = ({ text, randomColor = false }) => {
     });
     
     return (
-        <View style={randomColor ? styles.container : styles.defaultContainer} className="w-fit mx-1 px-2 py-0.5 border-0.5 rounded-full">
+        <View style={randomColor ? styles.container : styles.defaultContainer} className={"w-fit px-2 py-0.5 border-0.5 rounded-full " + (first ? "mr-1" : "ml-1")}>
             <Text style={randomColor && styles.text} className="text-gray-500 font-medium">{text}</Text>
         </View>
     )

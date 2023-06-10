@@ -4,12 +4,19 @@ import Event from '../../components/Event'
 
 import { useQuery } from '@apollo/client';
 import { gql } from "@apollo/client";
+// import { BannerAd } from 'react-native-google-mobile-ads';
+// import { BannerAdSize } from 'react-native-google-mobile-ads/src';
 
 
 const currentDate = new Date();
 currentDate.setDate(currentDate.getDate() - 3);
 
 const formattedDate = currentDate.toISOString();
+
+const adUnitId = Platform.select({
+    ios: 'ca-app-pub-6142479111003129/8992961562',
+    android: 'ca-app-pub-6142479111003129/9184533255',
+});
 
 export const Events = () => {
     const [eventsCalendar, seteventsCalendar] = useState([])
@@ -91,13 +98,23 @@ export const Events = () => {
     return (
         <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} className="bg-white h-full px-4">
             <View className="w-full flex flex-col gap-4 mt-0 pb-32 h-fit">
-                {eventsCalendar.map(eventMonth => {
+                {eventsCalendar.map((eventMonth, x) => {
                     return (
                         <View key={`events-${eventMonth.Month}`} className="w-full flex flex-col">
                             <Text className="text-2xl font-bold">{eventMonth.Month}</Text>
                             {eventMonth.events.map((event, i) => {
                                 return <Event key={`${eventMonth}-event-${i}`} data={event} />
                             })}
+
+                            {/* <View className="flex flex-row justify-center mt-2.5">
+                                <BannerAd className="bg-white"
+                                    unitId={adUnitId}
+                                    size={BannerAdSize.BANNER}
+                                    requestOptions={{
+                                        requestNonPersonalizedAdsOnly: true,
+                                    }}
+                                />
+                            </View> */}
                         </View>
                     )
                 })}
