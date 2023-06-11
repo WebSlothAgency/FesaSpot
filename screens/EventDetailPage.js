@@ -12,16 +12,16 @@ import { gql, useQuery } from '@apollo/client';
 
 import ImageView from "react-native-image-viewing";
 
-// import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 //contexts
 import { EventStorageContext } from '../contexts/EventStorageContext';
 import { useContext } from 'react';
 
-// const adUnitId = Platform.select({
-//     ios: 'ca-app-pub-6142479111003129/8992961562',
-//     android: 'ca-app-pub-6142479111003129/9184533255',
-// });
+const adUnitId = Platform.select({
+    ios: 'ca-app-pub-6142479111003129/8992961562',
+    android: 'ca-app-pub-6142479111003129/9184533255',
+});
 
 export default function EventDetailPage({ route }) {
     const { savedEventIds, saveEventId, removeEventId } = useContext(EventStorageContext);
@@ -268,7 +268,7 @@ export default function EventDetailPage({ route }) {
                             </View>
                         </View>
 
-                        {/* <View className="bg-white w-full flex flex-row justify-center mt-6">
+                        <View className="bg-white w-full flex flex-row justify-center mt-6">
                             <BannerAd className="bg-white"
                                 unitId={adUnitId}
                                 size={BannerAdSize.LARGE_BANNER}
@@ -276,7 +276,7 @@ export default function EventDetailPage({ route }) {
                                     requestNonPersonalizedAdsOnly: true,
                                 }}
                             />
-                        </View> */}
+                        </View>
 
                         <View className="bg-white border-0.5 border-gray-300 w-full h-fit rounded-lg mt-6 flex flex-col divide-y-0.5 divide-gray-300">
                             <View className="p-4">
@@ -373,7 +373,7 @@ export default function EventDetailPage({ route }) {
                             </View>
                         </View>
 
-                        {/* <View className="bg-white w-full flex flex-row justify-center mt-6">
+                        <View className="bg-white w-full flex flex-row justify-center mt-6">
                             <BannerAd className="bg-white"
                                 unitId={adUnitId}
                                 size={BannerAdSize.BANNER}
@@ -381,7 +381,7 @@ export default function EventDetailPage({ route }) {
                                     requestNonPersonalizedAdsOnly: true,
                                 }}
                             />
-                        </View> */}
+                        </View>
                     </View>
                 </ScrollView>
 
