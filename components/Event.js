@@ -73,10 +73,11 @@ const Event = ({ data }) => {
                     <View className="h-fit w-full ml-2">
                         <View className="flex flex-col w-9/12 px-2 gap-1">
                             <Text className="text-xl font-bold w-11/12">{data.title}</Text>
-                            {tags.length > 0 && <View className="flex flex-row">
-                                <EventDescriptionTag first={true} randomColor text={tags[0].tag} />
-                                {tags.length >= 2 && <EventDescriptionTag randomColor text={`+${tags.length - 1}`} />}
-                            </View>}
+                            <View className="flex flex-row">
+                                {tags.length > 0 && <EventDescriptionTag first={true} randomColor text={tags[0].tag} />}
+                                {/* {tags.length >= 2 && <EventDescriptionTag randomColor text={`+${tags.length - 1}`} />} */}
+                                <EventDescriptionTag first={true} randomColor text={data.age} />
+                            </View>
                             <Text>{new Date(data.startDate).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' })} • {data.locationDisplayName}</Text>
                             <Text className="italic text-xs truncate">{truncateText(data.beschrijving.text.replace(/\\n/g, ""))}</Text>
                         </View>

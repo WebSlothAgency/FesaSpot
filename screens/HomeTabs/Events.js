@@ -46,6 +46,7 @@ export const Events = () => {
           }
           promoted
           organizer
+          age
         }
       }`);
 

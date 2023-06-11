@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, Text, View, Image, RefreshControl, TouchableOpacity, Linking, Share, Platform } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, Text, View, Image, RefreshControl, TouchableOpacity, Linking, Share, Platform, Modal, Animated } from 'react-native';
 import Svg, { Circle, Rect, Path } from 'react-native-svg';
 import { StatusBar } from 'expo-status-bar';
 import { StatusBar as SB, ActivityIndicator } from 'react-native';
@@ -9,6 +9,8 @@ import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import EventDescriptionTag from '../components/EventDescriptionTag';
 import { gql, useQuery } from '@apollo/client';
+
+import ImageView from "react-native-image-viewing";
 
 // import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
@@ -30,6 +32,8 @@ export default function EventDetailPage({ route }) {
     const [eventsCalendar, seteventsCalendar] = useState([])
     const [refreshing, setRefreshing] = useState(false);
     const [eventData, setEventData] = useState();
+
+    const [modalVisible, setModalVisible] = useState(false);
 
     const [showQA, setShowQA] = useState(false)
 
@@ -56,6 +60,7 @@ export default function EventDetailPage({ route }) {
           adres
           tickets
           website
+          age
           pricing
           title
           locationDisplayName
@@ -173,9 +178,9 @@ export default function EventDetailPage({ route }) {
     async function share() {
         try {
             await Share.share({
-                url: `https://eventssr.netlify.app/event/${eventData.id}`,
+                url: `https://www.fesaspot.sr/event/${eventData.id}`,
                 message:
-                    `${eventData.title}\n${parseDate(eventData.startDate)} - ${parseDate(eventData.endDate)}\n${replaceNewlinesWithEnters(eventData.beschrijving.text)}`
+                    `${eventData.title}\n${parseDate(eventData.startDate)} - ${parseDate(eventData.endDate)}\n\n${replaceNewlinesWithEnters(eventData.beschrijving.text).split("\n")[0]}\n\n\nBezoek de website:`
             });
         } catch { }
     }
@@ -190,16 +195,16 @@ export default function EventDetailPage({ route }) {
     return (
         <View className="w-full">
             <SafeAreaView style={styles.container}>
-                <StatusBar style="dark" />
+                <StatusBar style={modalVisible ? "light" : "dark"} />
                 <Header />
 
                 {/* CONTENT VIEW */}
                 <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} className="bg-white h-full p-4">
                     <View className="w-full flex flex-col pb-32 h-fit">
                         <View className="flex w-full flex-row">
-                            <View className="h-[175px] aspect-[3/4] overflow-hidden flex justify-center items-center rounded-lg bg-white border-0.5 border-gray-300">
+                            <TouchableOpacity onPress={() => setModalVisible(true)} className="h-[175px] aspect-[3/4] overflow-hidden flex justify-center items-center rounded-lg bg-white border-0.5 border-gray-300">
                                 <Image className="w-full h-full" source={{ uri: eventData.banner.url }}></Image>
-                            </View>
+                            </TouchableOpacity>
 
                             <View className="h-fit w-full pl-4">
                                 {eventData.promoted && <View className="flex flex-row items-center gap-2 w-1/2">
@@ -209,10 +214,17 @@ export default function EventDetailPage({ route }) {
                                     <Text className="font-bold text-promotionColor">Promoted</Text>
                                 </View>}
 
+
                                 <View className="flex flex-col mt-1 w-7/12">
-                                    <Text className="text-xl font-bold">{eventData?.title}</Text>
-                                    <Text className="mt-2">{parseTitleDate(eventData?.startDate)} ({getHourFromDate(eventData?.startDate)}) · {eventData?.locationDisplayName}</Text>
+                                    <Text className="text-xl font-bold text-gray-900">{eventData?.title}</Text>
+                                    <View className="w-fit">
+                                        <View className="flex flex-row gap-2 mt-1.5">
+                                            <EventDescriptionTag randomColor key={`tag-`} text={eventData.age} />
+                                        </View>
+                                    </View>
+                                    <Text className="mt-4">{parseTitleDate(eventData?.startDate)} ({getHourFromDate(eventData?.startDate)}) · {eventData?.locationDisplayName}</Text>
                                 </View>
+
                             </View>
                         </View>
 
@@ -221,20 +233,23 @@ export default function EventDetailPage({ route }) {
                                 <Svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <Path d="M1 11H21M1 11C1 16.5228 5.47715 21 11 21M1 11C1 5.47715 5.47715 1 11 1M21 11C21 16.5228 16.5228 21 11 21M21 11C21 5.47715 16.5228 1 11 1M11 1C13.5013 3.73835 14.9228 7.29203 15 11C14.9228 14.708 13.5013 18.2616 11 21M11 1C8.49872 3.73835 7.07725 7.29203 7 11C7.07725 14.708 8.49872 18.2616 11 21" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </Svg>
-                                <Text className="ml-2 font-semibold">Koop je Tickets</Text>
+                                <Text className="ml-2 font-semibold text-gray-900">Koop je Tickets</Text>
                             </TouchableOpacity>}
+
                             {(!eventData.tickets && eventData.website) && <TouchableOpacity onPress={() => openWebsite(eventData.website)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-0.5 border-gray-300 py-2">
                                 <Svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <Path d="M1 11H21M1 11C1 16.5228 5.47715 21 11 21M1 11C1 5.47715 5.47715 1 11 1M21 11C21 16.5228 16.5228 21 11 21M21 11C21 5.47715 16.5228 1 11 1M11 1C13.5013 3.73835 14.9228 7.29203 15 11C14.9228 14.708 13.5013 18.2616 11 21M11 1C8.49872 3.73835 7.07725 7.29203 7 11C7.07725 14.708 8.49872 18.2616 11 21" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </Svg>
-                                <Text className="ml-2 font-semibold">Website van Organisator</Text>
+                                <Text className="ml-2 font-semibold text-gray-900">Website van Organisator</Text>
                             </TouchableOpacity>}
+
                             {(!eventData.tickets && !eventData.website) && <TouchableOpacity onPress={() => openWebsite(`https://www.fesaspot.sr/event/${eventData.id}`)} className="flex-1 h-10 rounded-full flex-row justify-center items-center bg-white border-0.5 border-gray-300 py-2">
                                 <Svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <Path d="M1 11H21M1 11C1 16.5228 5.47715 21 11 21M1 11C1 5.47715 5.47715 1 11 1M21 11C21 16.5228 16.5228 21 11 21M21 11C21 5.47715 16.5228 1 11 1M11 1C13.5013 3.73835 14.9228 7.29203 15 11C14.9228 14.708 13.5013 18.2616 11 21M11 1C8.49872 3.73835 7.07725 7.29203 7 11C7.07725 14.708 8.49872 18.2616 11 21" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </Svg>
-                                <Text className="ml-2 font-semibold">Website Bezoeken</Text>
+                                <Text className="ml-2 font-semibold text-gray-900">Website Bezoeken</Text>
                             </TouchableOpacity>}
+
                             <View className="flex flex-row gap-2 w-fit ml-0.5">
                                 <TouchableOpacity onPress={() => share()} className="h-10 w-10 flex items-center justify-center rounded-full bg-white border-0.5 border-gray-300">
                                     <Svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -264,8 +279,8 @@ export default function EventDetailPage({ route }) {
 
                         <View className="bg-white border-0.5 border-gray-300 w-full h-fit rounded-lg mt-6 flex flex-col divide-y-0.5 divide-gray-300">
                             <View className="p-4">
-                                <Text className="font-semibold">Beschrijving</Text>
-                                <Text className="mt-2">{replaceNewlinesWithEnters(eventData.beschrijving.text)}</Text>
+                                <Text className="font-semibold text-gray-900">Beschrijving</Text>
+                                <Text className="mt-2 text-gray-700">{replaceNewlinesWithEnters(eventData.beschrijving.text)}</Text>
                                 {eventData.tags.length > 0 && <ScrollView horizontal className="flex flex-row gap-2 mt-3">
                                     {eventData.tags.map((tag, i) => {
                                         return <EventDescriptionTag key={`tag-${i}`} text={tag.tag} />
@@ -274,21 +289,21 @@ export default function EventDetailPage({ route }) {
                             </View>
 
                             <View className="p-4">
-                                <Text className="font-semibold">Datum</Text>
+                                <Text className="font-semibold text-gray-900">Datum</Text>
                                 <View className="flex flex-col mt-2">
                                     <Text className="text-gray-700">{parseDate(eventData.startDate)} - {parseDate(eventData.endDate)}</Text>
                                 </View>
                             </View>
 
                             {eventData.artists && <View className="p-4">
-                                <Text className="font-semibold">Artiesten</Text>
+                                <Text className="font-semibold text-gray-900">Artiesten</Text>
                                 <View className="flex flex-col mt-2">
                                     <Text className="text-gray-700">{replaceNewlinesWithEnters(eventData.artists)}</Text>
                                 </View>
                             </View>}
 
                             {eventData.pricing && <View className="p-4">
-                                <Text className="font-semibold">Prijs</Text>
+                                <Text className="font-semibold text-gray-900">Prijs</Text>
                                 <View className="flex flex-col mt-2">
                                     <Text className="text-gray-700">{replaceNewlinesWithEnters(eventData.pricing)}</Text>
                                 </View>
@@ -296,14 +311,14 @@ export default function EventDetailPage({ route }) {
 
                             {(eventData.sponsors || eventData.organizer) && <View className="p-4">
                                 {eventData.organizer && <View>
-                                    <Text className="font-semibold">Organisator</Text>
+                                    <Text className="font-semibold text-gray-900">Organisator</Text>
                                     <View className="flex flex-col mt-2">
                                         <Text className="text-gray-700">{replaceNewlinesWithEnters(eventData.organizer)}</Text>
                                     </View>
                                 </View>}
 
                                 {eventData.sponsors && <View className="mt-4">
-                                    <Text className="font-semibold">Sponsoren</Text>
+                                    <Text className="font-semibold text-gray-900">Sponsoren</Text>
                                     <View className="flex flex-col mt-2">
                                         <Text className="text-gray-700">{replaceNewlinesWithEnters(eventData.sponsors)}</Text>
                                     </View>
@@ -317,14 +332,14 @@ export default function EventDetailPage({ route }) {
                                     </Svg> : <Svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <Path d="M1 1L7 7L13 1" stroke="#344054" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </Svg>}
-                                    <Text className="font-semibold">Q&A</Text>
+                                    <Text className="font-semibold text-gray-900">Q&A</Text>
                                 </TouchableOpacity>
                                 <View className={"mt-2 " + (showQA ? "h-fit" : "h-0")}>
                                     {eventData.qa.map((sub, i) => {
                                         return (
                                             <View key={`sub-${i}`} className="mt-4">
                                                 <Text className="italic text-gray-500">{sub.question}</Text>
-                                                <Text className="mt-1">{sub.answer}</Text>
+                                                <Text className="mt-1 text-gray-700">{sub.answer}</Text>
                                             </View>
                                         )
                                     })}
@@ -333,10 +348,10 @@ export default function EventDetailPage({ route }) {
                         </View>
 
                         <View className="mt-6">
-                            <Text className="font-semibold">Locatie</Text>
+                            <Text className="font-semibold text-gray-900">Locatie</Text>
                             {eventData.adres && <View className="pt-2">
                                 <View>
-                                    <Text className="font-semibold">Adres</Text>
+                                    <Text className="font-semibold text-gray-900">Adres</Text>
                                     <View className="flex flex-col mt-1">
                                         <Text className="text-gray-700">{eventData.adres}</Text>
                                     </View>
@@ -368,8 +383,15 @@ export default function EventDetailPage({ route }) {
                         </View> */}
                     </View>
                 </ScrollView>
-            </SafeAreaView>
 
+                <ImageView
+                    images={[{ uri: eventData.banner.url }]}
+                    imageIndex={0}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                    presentationStyle='overFullScreen'
+                />
+            </SafeAreaView>
             <NavBar event={true} navbarState={navbarState} setNavbarState={setNavbarState} />
         </View>
     );

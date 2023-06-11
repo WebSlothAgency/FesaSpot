@@ -1,29 +1,17 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Button, Text, TouchableOpacity, View } from 'react-native';
 import { ClipPath, Defs, G, Path, Rect, Svg } from 'react-native-svg';
 
 const Header = ({ tag, selectedDate, setShowCalendar, showCalendar }) => {
+    const navigation = useNavigation()
 
     const parseDateString = (dateString) => {
         const date = new Date(dateString);
         const day = date.getDate();
         const monthIndex = date.getMonth();
         const year = date.getFullYear();
-
-        const months = [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'Mei',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sep',
-            'Okt',
-            'Nov',
-            'Dec',
-        ];
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec',];
 
         const month = months[monthIndex];
 
@@ -33,7 +21,7 @@ const Header = ({ tag, selectedDate, setShowCalendar, showCalendar }) => {
     return (
         <>
             <View className="h-[60px] flex flex-row justify-between items-center px-4 bg-white border-b-0.5 border-gray-200 w-full top-0 sticky">
-                <View className="flex flex-row items-center">
+                <TouchableOpacity onPress={() => navigation.navigate("Home", { tag: 'calendar' })} className="flex flex-row items-center">
                     <Svg width="30" height="30" viewBox="0 0 328 328" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <G clip-path="url(#clip0_1173_38378)">
                             <Path d="M105.926 68.224C104.905 69.2445 104.131 70.4745 103.484 71.8229L103.411 71.75L1.22082 301.951L1.32104 302.052C-0.574069 305.723 2.5966 313.194 9.09282 319.7C15.589 326.196 23.0601 329.367 26.7319 327.472L26.823 327.563L257.024 225.363L256.951 225.281C258.291 224.644 259.521 223.869 260.55 222.83C274.782 208.599 251.703 162.451 209.018 119.756C166.314 77.0618 120.166 53.9925 105.926 68.224Z" fill="#C8102E" />
@@ -58,8 +46,8 @@ const Header = ({ tag, selectedDate, setShowCalendar, showCalendar }) => {
                             </ClipPath>
                         </Defs>
                     </Svg>
-                    <Text className="text-xl font-black ml-2">FesaSpot</Text>
-                </View>
+                    <Text className="text-xl font-black ml-2 mt-0.5">FesaSpot</Text>
+                </TouchableOpacity>
                 {/* <View className="flex flex-row gap-4">
                 <Svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <Path d="M6 12H18M3 6H21M9 18H15" stroke="#121926" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

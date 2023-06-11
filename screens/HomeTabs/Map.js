@@ -6,9 +6,19 @@ import MapView, { Callout, Marker } from 'react-native-maps';
 import { useQuery } from '@apollo/client';
 import { gql } from "@apollo/client";
 import CustomDatePicker from '../../components/CustomDatePicker';
+import EventDescriptionTag from '../../components/EventDescriptionTag';
+// import Geolocation from '@react-native-community/geolocation';
 
 const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) => {
     const navigation = useNavigation();
+
+    const [position, setPosition] = useState({
+        latitude: 10,
+        longitude: 10,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001,
+    });
+
     const [selectedEvent, setselectedEvent] = useState();
     const [eventsCalendar, seteventsCalendar] = useState([]);
     const [thisDate, setThisDate] = useState(new Date().toISOString())
@@ -23,6 +33,7 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
             const eventsArray = data.events.map(event => ({
                 title: event.title,
                 id: event.id,
+                age: event.age,
                 opened: isCurrentTimeBetween(event.startDate, event.endDate),
                 openTime: parseDate(event.startDate),
                 closeTime: parseDate(event.endDate),
@@ -65,6 +76,7 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
         id
         endDate
         startDate
+        age
       }
     }`);
 
@@ -107,6 +119,20 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
         fetchData();
     }, []);
 
+    // useEffect(() => {
+    //     Geolocation.getCurrentPosition((pos) => {
+    //       const crd = pos.coords;
+    //       setPosition({
+    //         latitude: crd.latitude,
+    //         longitude: crd.longitude,
+    //         latitudeDelta: 0.0421,
+    //         longitudeDelta: 0.0421,
+    //       });
+    //     }).catch((err) => {
+    //       console.log(err);
+    //     });
+    //   }, []);
+
     return (
         <View>
             <View className="flex flex-col w-full h-full">
@@ -123,17 +149,24 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
                         latitudeDelta: 0.075,
                         longitudeDelta: 0.075
                     }}
+
+                    showsUserLocation={true}
                 >
                     {!loading && eventsCalendar.map((marker, i) => (
                         <Marker key={`marker-${i}`} coordinate={{ latitude: formatNumberWithRandomDecimal(marker.location.longitude), longitude: formatNumberWithRandomDecimal(marker.location.latitude) }}
                             pinColor={marker.opened ? "limegreen" : "red"}>
-                            <Callout onPress={() => navigation.navigate("Event", { eventID: marker.id })}>
-                                <View className="flex flex-row gap-2">
+                            <Callout className={Platform.OS === "android" ? "p-2" : ""} onPress={() => navigation.navigate("Event", { eventID: marker.id })}>
+                                <View className="flex flex-row gap-2 items-start">
                                     {Platform.OS !== "android" && <Image className="w-10 aspect-[3/4] rounded-md" source={{ uri: marker.banner }}></Image>}
                                     <View>
-                                        <Text className="font-bold text-left">{marker.title}</Text>
-                                        <Text>Open: {marker.openTime}</Text>
-                                        <Text>Sluit: {marker.closeTime}</Text>
+                                        <View className="mb-1">
+                                            <Text className="font-bold text-left">{marker.title}</Text>
+                                            <View className="flex flex-row mt-1">
+                                                <EventDescriptionTag text={marker.age} first={true} randomColor />
+                                            </View>
+                                        </View>
+                                        <Text><Text className="font-bold">Open:</Text> {marker.openTime}</Text>
+                                        <Text><Text className="font-bold">Sluit:</Text> {marker.closeTime}</Text>
                                     </View>
                                 </View>
                                 <TouchableOpacity onPress={() => navigation.navigate("Event", { eventID: marker.id })} className={"mt-2 w-full bg-black rounded-md"}>

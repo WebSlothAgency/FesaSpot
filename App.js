@@ -9,7 +9,7 @@ import EventDetailPage from './screens/EventDetailPage';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: 'https://api-us-east-1-shared-usea1-02.hygraph.com/v2/clhvznxbz10sb01tbempl16ux/master',
+  uri: 'https://us-east-1-shared-usea1-02.cdn.hygraph.com/content/clhvznxbz10sb01tbempl16ux/master',
   cache: new InMemoryCache({
     typePolicies: {
       Event: {

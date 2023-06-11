@@ -8,6 +8,19 @@ const EventDescriptionTag = ({ text, randomColor = false, first = false }) => {
     let border = ["#D9D6FE", "#B2DDFF", "#FCCEEE", "#F9DBAF", "#ABEFC6", "#FECDCA"]
     let txt = ["#5925DC", "#175CD3", "#C11574", "#B93815", "#067647", "#B42318"]
 
+
+    let age = text.split("+")[0]
+
+    if(text == "PG"){
+        randomNum = 4
+    }else if (age >0 && age < 18){
+        randomNum = 1
+    }else if (age >= 18 && age < 21){
+        randomNum = 3
+    }else if (age >= 21){
+        randomNum = 5
+    }
+
     const styles = StyleSheet.create({
         container: {
             backgroundColor: bg[randomNum],
