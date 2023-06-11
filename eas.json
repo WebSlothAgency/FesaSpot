@@ -18,9 +18,8 @@
     "production": {}
   },
   "submit": {
-    "production": {}
-  },
-  "production": {
-    "autoIncrement": true
+    "production": {
+      "autoIncrement": true
+    }
   }
 }
