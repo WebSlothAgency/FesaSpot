@@ -3,7 +3,7 @@
     "name": "FesaSpot",
     "slug": "events-sr",
     "scheme": "fesaspot",
-    "version": "3.0.0",
+    "version": "3.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -17,15 +17,23 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.websloth.eventssr"
+      "bundleIdentifier": "com.websloth.eventssr",
+      "config": {
+        "googleMapsApiKey": "AIzaSyDnIboWVKR3B0HfINg3er_V5Ck2jdgrLjw"
+      }
     },
     "android": {
-      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.websloth.eventssr"
+      "package": "com.websloth.eventssr",
+      "versionCode": 5,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDnIboWVKR3B0HfINg3er_V5Ck2jdgrLjw"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -38,7 +46,7 @@
     "owner": "siddhart04"
   },
   "react-native-google-mobile-ads": {
-    "android_app_id": "ca-app-pub-6142479111003129/9184533255",
-    "ios_app_id": "ca-app-pub-6142479111003129/8992961562"
+    "android_app_id": "ca-app-pub-6142479111003129~8596062666",
+    "ios_app_id": "ca-app-pub-6142479111003129~2191749499"
   }
 }
