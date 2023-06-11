@@ -1,7 +1,8 @@
 {
   "cli": {
     "version": ">= 3.13.2",
-    "promptToConfigurePushNotifications": false
+    "promptToConfigurePushNotifications": false,
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
@@ -18,5 +19,8 @@
   },
   "submit": {
     "production": {}
+  },
+  "production": {
+    "autoIncrement": true
   }
 }
