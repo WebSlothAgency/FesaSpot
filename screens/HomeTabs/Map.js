@@ -7,7 +7,6 @@ import { useQuery } from '@apollo/client';
 import { gql } from "@apollo/client";
 import CustomDatePicker from '../../components/CustomDatePicker';
 import EventDescriptionTag from '../../components/EventDescriptionTag';
-// import Geolocation from '@react-native-community/geolocation';
 
 const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) => {
     const navigation = useNavigation();
@@ -118,20 +117,6 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
     useEffect(() => {
         fetchData();
     }, []);
-
-    // useEffect(() => {
-    //     Geolocation.getCurrentPosition((pos) => {
-    //       const crd = pos.coords;
-    //       setPosition({
-    //         latitude: crd.latitude,
-    //         longitude: crd.longitude,
-    //         latitudeDelta: 0.0421,
-    //         longitudeDelta: 0.0421,
-    //       });
-    //     }).catch((err) => {
-    //       console.log(err);
-    //     });
-    //   }, []);
 
     return (
         <View>

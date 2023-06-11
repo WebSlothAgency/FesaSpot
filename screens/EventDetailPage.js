@@ -29,6 +29,7 @@ export default function EventDetailPage({ route }) {
     const [navbarState, setNavbarState] = useState("event")
     let { eventID } = route.params
 
+
     const [eventsCalendar, seteventsCalendar] = useState([])
     const [refreshing, setRefreshing] = useState(false);
     const [eventData, setEventData] = useState();

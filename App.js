@@ -8,6 +8,8 @@ import EventDetailPage from './screens/EventDetailPage';
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
+import * as Linking from 'expo-linking';
+
 const client = new ApolloClient({
   uri: 'https://us-east-1-shared-usea1-02.cdn.hygraph.com/content/clhvznxbz10sb01tbempl16ux/master',
   cache: new InMemoryCache({
@@ -25,6 +27,15 @@ const client = new ApolloClient({
   }),
 });
 
+const linking = {
+  prefixes: [Linking.makeUrl('/')],
+  config: {
+    screens: {
+      Event: 'event/:eventID',
+    },
+  },
+};
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -32,7 +43,7 @@ export default function App() {
   return (
       <ApolloProvider client={client}>
         <EventStorageProvider>
-          <NavigationContainer>
+          <NavigationContainer linking={linking}>
             <Stack.Navigator>
               <Stack.Screen
                 name="Home"
