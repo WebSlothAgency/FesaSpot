@@ -12,7 +12,7 @@ import { gql, useQuery } from '@apollo/client';
 
 import ImageView from "react-native-image-viewing";
 
-import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+// import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 //contexts
 import { EventStorageContext } from '../contexts/EventStorageContext';
@@ -179,9 +179,8 @@ export default function EventDetailPage({ route }) {
     async function share() {
         try {
             await Share.share({
-                url: `https://www.fesaspot.sr/event/${eventData.id}`,
                 message:
-                    `${eventData.title}\n${parseDate(eventData.startDate)} - ${parseDate(eventData.endDate)}\n\n${replaceNewlinesWithEnters(eventData.beschrijving.text).split("\n")[0]}\n\n\nBezoek de website:`
+                    `${eventData.title}\n${parseDate(eventData.startDate)} - ${parseDate(eventData.endDate)}\n\n${replaceNewlinesWithEnters(eventData.beschrijving.text).split("\n")[0]}\n\n\nBezoek de website:\nhttps://www.fesaspot.sr/event/${eventData.id}`
             });
         } catch { }
     }
@@ -268,7 +267,7 @@ export default function EventDetailPage({ route }) {
                             </View>
                         </View>
 
-                        <View className="bg-white w-full flex flex-row justify-center mt-6">
+                        {/* <View className="bg-white w-full flex flex-row justify-center mt-6">
                             <BannerAd className="bg-white"
                                 unitId={adUnitId}
                                 size={BannerAdSize.LARGE_BANNER}
@@ -276,7 +275,7 @@ export default function EventDetailPage({ route }) {
                                     requestNonPersonalizedAdsOnly: true,
                                 }}
                             />
-                        </View>
+                        </View> */}
 
                         <View className="bg-white border-0.5 border-gray-300 w-full h-fit rounded-lg mt-6 flex flex-col divide-y-0.5 divide-gray-300">
                             <View className="p-4">
@@ -373,7 +372,7 @@ export default function EventDetailPage({ route }) {
                             </View>
                         </View>
 
-                        <View className="bg-white w-full flex flex-row justify-center mt-6">
+                        {/* <View className="bg-white w-full flex flex-row justify-center mt-6">
                             <BannerAd className="bg-white"
                                 unitId={adUnitId}
                                 size={BannerAdSize.BANNER}
@@ -381,7 +380,7 @@ export default function EventDetailPage({ route }) {
                                     requestNonPersonalizedAdsOnly: true,
                                 }}
                             />
-                        </View>
+                        </View> */}
                     </View>
                 </ScrollView>
 

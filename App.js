@@ -2,6 +2,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { EventStorageProvider } from './contexts/EventStorageContext';
 
+import { Text } from 'react-native-svg';
+
 //PAGES
 import Home from './screens/Home';
 import EventDetailPage from './screens/EventDetailPage';
@@ -38,23 +40,24 @@ const linking = {
 
 const Stack = createNativeStackNavigator();
 
+
 export default function App() {
 
   return (
-      <ApolloProvider client={client}>
-        <EventStorageProvider>
-          <NavigationContainer linking={linking}>
-            <Stack.Navigator>
-              <Stack.Screen
-                name="Home"
-                component={Home}
-                options={{ headerShown: false }}
-              />
+    <ApolloProvider client={client}>
+      <EventStorageProvider>
+        <NavigationContainer linking={linking}>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Home"
+              component={Home}
+              options={{ headerShown: false }}
+            />
 
-              <Stack.Screen name="Event" component={EventDetailPage} options={{ headerShown: false }} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </EventStorageProvider>
-      </ApolloProvider>
+            <Stack.Screen name="Event" component={EventDetailPage} options={{ headerShown: false }} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </EventStorageProvider>
+    </ApolloProvider>
   );
 }
