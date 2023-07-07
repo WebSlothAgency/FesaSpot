@@ -13,10 +13,10 @@ const currentDate = new Date();
 
 const formattedDate = currentDate.toISOString();
 
-// const adUnitId = Platform.select({
-//     ios: 'ca-app-pub-6142479111003129/8992961562',
-//     android: 'ca-app-pub-6142479111003129/9184533255',
-// });
+const adUnitId = Platform.select({
+    ios: 'ca-app-pub-6142479111003129/8992961562',
+    android: 'ca-app-pub-6142479111003129/9184533255',
+});
 
 export const Events = () => {
     const [eventsCalendar, seteventsCalendar] = useState([])
@@ -107,15 +107,15 @@ export const Events = () => {
                                 return <Event key={`${eventMonth}-event-${i}`} data={event} />
                             })}
 
-                            {/* <View className="flex flex-row justify-center mt-2.5">
-                                <BannerAd className="bg-white"
+                            <View className="flex flex-row justify-center mt-2.5">
+                                {/* <BannerAd className="bg-white"
                                     unitId={adUnitId}
                                     size={BannerAdSize.BANNER}
                                     requestOptions={{
                                         requestNonPersonalizedAdsOnly: true,
                                     }}
-                                />
-                            </View> */}
+                                /> */}
+                            </View>
                         </View>
                     )
                 })}

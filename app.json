@@ -3,7 +3,7 @@
     "name": "FesaSpot",
     "slug": "events-sr",
     "scheme": "fesaspot",
-    "version": "3.0.6",
+    "version": "3.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,7 +16,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.websloth.eventssr",
       "config": {
         "googleMapsApiKey": "AIzaSyDnIboWVKR3B0HfINg3er_V5Ck2jdgrLjw"
@@ -28,7 +28,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.websloth.eventssr",
-      "versionCode": 6,
+      "versionCode": 8,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyDnIboWVKR3B0HfINg3er_V5Ck2jdgrLjw"

@@ -136,6 +136,7 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
                     }}
 
                     showsUserLocation={true}
+                    followsUserLocation={true}
                 >
                     {!loading && eventsCalendar.map((marker, i) => (
                         <Marker key={`marker-${i}`} coordinate={{ latitude: formatNumberWithRandomDecimal(marker.location.longitude), longitude: formatNumberWithRandomDecimal(marker.location.latitude) }}

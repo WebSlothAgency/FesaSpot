@@ -106,7 +106,7 @@ const Saved = () => {
 
     return (
         <>
-            {savedEventIds.length > 0 ? (
+            {eventsCalendar.length > 0 ? (
                 <ScrollView
                     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                     className="bg-white h-full px-4"

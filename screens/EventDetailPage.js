@@ -12,6 +12,8 @@ import { gql, useQuery } from '@apollo/client';
 
 import ImageView from "react-native-image-viewing";
 
+import * as Clipboard from 'expo-clipboard';
+
 // import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 //contexts
@@ -91,9 +93,13 @@ export default function EventDetailPage({ route }) {
         },
     });
 
+    async function copyAdres() {
+        await Clipboard.setStringAsync(eventData.adres);
+    }
+
     function getHourFromDate(dateString) {
         const date = new Date(dateString);
-        const hour = date.getUTCHours();
+        const hour = date.getHours();
         return `${hour}h`;
     }
 
@@ -132,9 +138,9 @@ export default function EventDetailPage({ route }) {
         const hours = date.getHours();
         const minutes = date.getMinutes();
 
-        const formattedDate = `${day} ${month} (${hours.toString().padStart(2, '0')}:${minutes
-            .toString()
-            .padStart(2, '0')})`;
+        let checkTime = hours.toString().padStart(2, '0') + minutes.toString().padStart(2, '0')
+        let realTime = `(${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')})`
+        const formattedDate = `${day} ${month} ${checkTime != "0159" ? realTime : "tot BAM"}`;
 
         return formattedDate;
     }
@@ -180,7 +186,7 @@ export default function EventDetailPage({ route }) {
         try {
             await Share.share({
                 message:
-                    `${eventData.title}\n${parseDate(eventData.startDate)} - ${parseDate(eventData.endDate)}\n\n${replaceNewlinesWithEnters(eventData.beschrijving.text).split("\n")[0]}\n\n\nBezoek de website:\nhttps://www.fesaspot.sr/event/${eventData.id}`
+                    `${eventData.title}\n${parseDate(eventData.startDate)} - ${parseDate(eventData.endDate)}\n\n${replaceNewlinesWithEnters(eventData.beschrijving.text).split("\n")[0]}\n\n\nDownload de FesaSpot app voor meer info:\nhttps://www.fesaspot.sr/download`
             });
         } catch { }
     }
@@ -267,15 +273,15 @@ export default function EventDetailPage({ route }) {
                             </View>
                         </View>
 
-                        {/* <View className="bg-white w-full flex flex-row justify-center mt-6">
-                            <BannerAd className="bg-white"
+                        <View className="bg-white w-full flex flex-row justify-center mt-6">
+                            {/* <BannerAd className="bg-white"
                                 unitId={adUnitId}
                                 size={BannerAdSize.LARGE_BANNER}
                                 requestOptions={{
                                     requestNonPersonalizedAdsOnly: true,
                                 }}
-                            />
-                        </View> */}
+                            /> */}
+                        </View>
 
                         <View className="bg-white border-0.5 border-gray-300 w-full h-fit rounded-lg mt-6 flex flex-col divide-y-0.5 divide-gray-300">
                             <View className="p-4">
@@ -349,11 +355,13 @@ export default function EventDetailPage({ route }) {
 
                         <View className="mt-6">
                             <Text className="font-semibold text-gray-900">Locatie</Text>
-                            {eventData.adres && <View className="pt-2">
+                            {eventData.adres && <View className="pt-2 flex">
                                 <View>
                                     <Text className="font-semibold text-gray-900">Adres</Text>
                                     <View className="flex flex-col mt-1">
-                                        <Text className="text-gray-700">{eventData.adres}</Text>
+                                        <TouchableOpacity onPress={copyAdres}>
+                                            <Text className="text-gray-700">{eventData.adres}</Text>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </View>}
@@ -372,15 +380,15 @@ export default function EventDetailPage({ route }) {
                             </View>
                         </View>
 
-                        {/* <View className="bg-white w-full flex flex-row justify-center mt-6">
-                            <BannerAd className="bg-white"
+                        <View className="bg-white w-full flex flex-row justify-center mt-6">
+                            {/* <BannerAd className="bg-white"
                                 unitId={adUnitId}
                                 size={BannerAdSize.BANNER}
                                 requestOptions={{
                                     requestNonPersonalizedAdsOnly: true,
                                 }}
-                            />
-                        </View> */}
+                            /> */}
+                        </View>
                     </View>
                 </ScrollView>
 
