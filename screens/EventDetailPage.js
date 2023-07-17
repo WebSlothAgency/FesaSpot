@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, Text, View, Image, RefreshControl, TouchableOpacity, Linking, Share, Platform, Modal, Animated } from 'react-native';
-import Svg, { Circle, Rect, Path } from 'react-native-svg';
+import { Button, StyleSheet, SafeAreaView, ScrollView, Text, View, Image, RefreshControl, TouchableOpacity, Linking, Share, Platform, Modal, Animated } from 'react-native';
+import Svg, { G, Defs, Circle, Rect, Path, ClipPath } from 'react-native-svg';
 import { StatusBar } from 'expo-status-bar';
 import { StatusBar as SB, ActivityIndicator } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
@@ -14,7 +14,7 @@ import ImageView from "react-native-image-viewing";
 
 import * as Clipboard from 'expo-clipboard';
 
-// import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 //contexts
 import { EventStorageContext } from '../contexts/EventStorageContext';
@@ -24,6 +24,8 @@ const adUnitId = Platform.select({
     ios: 'ca-app-pub-6142479111003129/8992961562',
     android: 'ca-app-pub-6142479111003129/9184533255',
 });
+
+
 
 export default function EventDetailPage({ route }) {
     const { savedEventIds, saveEventId, removeEventId } = useContext(EventStorageContext);
@@ -38,24 +40,24 @@ export default function EventDetailPage({ route }) {
 
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [showQA, setShowQA] = useState(false)
+    const [showQA, setShowQA] = useState(true)
 
     let { data, loading, refetch } = useQuery(gql`
     query MyQuery {
         events(where: {id: "${eventID}"}) {
-          id
-          banner {
-            url
-          }
-          beschrijving {
-            html
-            text
-          }
-          endDate
-          locatie {
-            latitude
-            longitude
-          }
+            id
+            banner {
+                url
+            }
+            beschrijving {
+                html
+                text
+            }
+            endDate
+            locatie {
+                latitude
+                longitude
+            }
           organizer
           promoted
           sponsors
@@ -69,16 +71,19 @@ export default function EventDetailPage({ route }) {
           locationDisplayName
           artists
           qa(first: 100) {
-            ... on QaComponent {
-              question
-              answer
+              ... on QaComponent {
+                  question
+                  answer
+                }
             }
-          }
-          tags(first: 100) {
-            tag
-          }
+            tags(first: 100) {
+                tag
+            }
+            otherImages(first: 10) {
+                url
+            }
         }
-      }`);
+    }`);
 
     useEffect(() => {
         if (loading) return
@@ -274,13 +279,13 @@ export default function EventDetailPage({ route }) {
                         </View>
 
                         <View className="bg-white w-full flex flex-row justify-center mt-6">
-                            {/* <BannerAd className="bg-white"
+                            <BannerAd className="bg-white"
                                 unitId={adUnitId}
                                 size={BannerAdSize.LARGE_BANNER}
                                 requestOptions={{
                                     requestNonPersonalizedAdsOnly: true,
                                 }}
-                            /> */}
+                            />
                         </View>
 
                         <View className="bg-white border-0.5 border-gray-300 w-full h-fit rounded-lg mt-6 flex flex-col divide-y-0.5 divide-gray-300">
@@ -359,8 +364,18 @@ export default function EventDetailPage({ route }) {
                                 <View>
                                     <Text className="font-semibold text-gray-900">Adres</Text>
                                     <View className="flex flex-col mt-1">
-                                        <TouchableOpacity onPress={copyAdres}>
+                                        <TouchableOpacity className="flex flex-row items-center" onPress={copyAdres}>
                                             <Text className="text-gray-700">{eventData.adres}</Text>
+                                            <Svg className="ml-2" width="17" height="17" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <G clipPath="url(#clip0_1363_40874)">
+                                                    <Path d="M7.5 7.5V2.5C7.5 1.125 8.625 0 10 0H22.5C23.163 0 23.7989 0.263392 24.2678 0.732233C24.7366 1.20107 25 1.83696 25 2.5V15C25 15.663 24.7366 16.2989 24.2678 16.7678C23.7989 17.2366 23.163 17.5 22.5 17.5H17.5V22.5C17.5 23.163 17.2366 23.7989 16.7678 24.2678C16.2989 24.7366 15.663 25 15 25H2.5C1.83696 25 1.20107 24.7366 0.732233 24.2678C0.263392 23.7989 0 23.163 0 22.5V10C0 8.625 1.125 7.5 2.5 7.5H7.5ZM10 7.5H15C15.663 7.5 16.2989 7.76339 16.7678 8.23223C17.2366 8.70107 17.5 9.33696 17.5 10V15H22.5V2.5H10V7.5ZM2.5 10V22.5H15V10H2.5Z" fill="#8A8A8A" />
+                                                </G>
+                                                <Defs>
+                                                    <ClipPath id="clip0_1363_40874">
+                                                        <Rect width="25" height="25" fill="white" />
+                                                    </ClipPath>
+                                                </Defs>
+                                            </Svg>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -381,19 +396,19 @@ export default function EventDetailPage({ route }) {
                         </View>
 
                         <View className="bg-white w-full flex flex-row justify-center mt-6">
-                            {/* <BannerAd className="bg-white"
+                            <BannerAd className="bg-white"
                                 unitId={adUnitId}
                                 size={BannerAdSize.BANNER}
                                 requestOptions={{
                                     requestNonPersonalizedAdsOnly: true,
                                 }}
-                            /> */}
+                            />
                         </View>
                     </View>
                 </ScrollView>
 
                 <ImageView
-                    images={[{ uri: eventData.banner.url }]}
+                    images={[{ uri: eventData.banner.url }, ...eventData?.otherImages.map(img => { return { uri: img.url } })]}
                     imageIndex={0}
                     visible={modalVisible}
                     onRequestClose={() => setModalVisible(false)}
