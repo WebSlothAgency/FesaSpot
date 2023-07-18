@@ -3,7 +3,7 @@
     "name": "FesaSpot",
     "slug": "events-sr",
     "scheme": "fesaspot",
-    "version": "3.0.9",
+    "version": "3.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -28,7 +28,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.websloth.eventssr",
-      "versionCode": 9,
+      "versionCode": 10,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyDnIboWVKR3B0HfINg3er_V5Ck2jdgrLjw"
