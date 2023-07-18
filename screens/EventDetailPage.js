@@ -4,6 +4,7 @@ import Svg, { G, Defs, Circle, Rect, Path, ClipPath } from 'react-native-svg';
 import { StatusBar } from 'expo-status-bar';
 import { StatusBar as SB, ActivityIndicator } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { schedulePushNotification, calculateSecondsUntilDate } from '../helpers/NotificationHandler'
 
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
@@ -14,7 +15,7 @@ import ImageView from "react-native-image-viewing";
 
 import * as Clipboard from 'expo-clipboard';
 
-import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+// import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 //contexts
 import { EventStorageContext } from '../contexts/EventStorageContext';
@@ -32,7 +33,6 @@ export default function EventDetailPage({ route }) {
 
     const [navbarState, setNavbarState] = useState("event")
     let { eventID } = route.params
-
 
     const [eventsCalendar, seteventsCalendar] = useState([])
     const [refreshing, setRefreshing] = useState(false);
@@ -89,6 +89,14 @@ export default function EventDetailPage({ route }) {
         if (loading) return
         setEventData(data.events[0])
     }, [loading, data])
+
+
+    function addNotifications() {
+        schedulePushNotification(eventData.startDate, 1, "FesaSpot", `${eventData.title} begint over 1 dag!`)
+        schedulePushNotification(eventData.startDate, 3, "FesaSpot", `${eventData.title} begint over 3 dagen!`)
+        schedulePushNotification(eventData.startDate, 7, "FesaSpot", `${eventData.title} begint over 7 dagen!`)
+    }
+
 
     const styles = StyleSheet.create({
         container: {
@@ -183,6 +191,7 @@ export default function EventDetailPage({ route }) {
         if (savedEventIds.includes(evID)) {
             removeEventId(evID)
         } else {
+            addNotifications()
             saveEventId(evID)
         }
     }
@@ -279,13 +288,13 @@ export default function EventDetailPage({ route }) {
                         </View>
 
                         <View className="bg-white w-full flex flex-row justify-center mt-6">
-                            <BannerAd className="bg-white"
+                            {/* <BannerAd className="bg-white"
                                 unitId={adUnitId}
                                 size={BannerAdSize.LARGE_BANNER}
                                 requestOptions={{
                                     requestNonPersonalizedAdsOnly: true,
                                 }}
-                            />
+                            /> */}
                         </View>
 
                         <View className="bg-white border-0.5 border-gray-300 w-full h-fit rounded-lg mt-6 flex flex-col divide-y-0.5 divide-gray-300">
@@ -396,13 +405,13 @@ export default function EventDetailPage({ route }) {
                         </View>
 
                         <View className="bg-white w-full flex flex-row justify-center mt-6">
-                            <BannerAd className="bg-white"
+                            {/* <BannerAd className="bg-white"
                                 unitId={adUnitId}
                                 size={BannerAdSize.BANNER}
                                 requestOptions={{
                                     requestNonPersonalizedAdsOnly: true,
                                 }}
-                            />
+                            /> */}
                         </View>
                     </View>
                 </ScrollView>

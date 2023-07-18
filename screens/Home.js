@@ -9,6 +9,7 @@ import NavBar from '../components/NavBar';
 import { Events } from './HomeTabs/Events';
 import Map from './HomeTabs/Map';
 import Saved from './HomeTabs/Saved';
+import Settings from './HomeTabs/Settings';
 
 const Home = ({ route }) => {
     const [navbarState, setNavbarState] = useState("calendar")
@@ -24,6 +25,7 @@ const Home = ({ route }) => {
             height: "100%",
             width: "100%",
             marginTop: Platform.OS === "android" ? SB.currentHeight : 0,
+            backgroundColor: "#FFF"
         },
     });
 
@@ -37,6 +39,7 @@ const Home = ({ route }) => {
                 {navbarState == "calendar" && <Events />}
                 {navbarState == "map" && <Map showCalendar={showCalendar} setShowCalendar={setShowCalendar} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />}
                 {navbarState == "saved" && <Saved />}
+                {navbarState == "settings" && <Settings />}
             </SafeAreaView>
 
             <NavBar navbarState={navbarState} setNavbarState={setNavbarState} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />

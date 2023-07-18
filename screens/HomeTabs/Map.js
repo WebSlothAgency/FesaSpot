@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/client';
 import { gql } from "@apollo/client";
 import CustomDatePicker from '../../components/CustomDatePicker';
 import EventDescriptionTag from '../../components/EventDescriptionTag';
+import * as Location from 'expo-location';
 
 const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) => {
     const navigation = useNavigation();
@@ -134,9 +135,7 @@ const Map = ({ selectedDate, setSelectedDate, setShowCalendar, showCalendar }) =
                         latitudeDelta: 0.075,
                         longitudeDelta: 0.075
                     }}
-
-                    showsUserLocation={true}
-                    followsUserLocation={true}
+                    showsUserLocation
                 >
                     {!loading && eventsCalendar.map((marker, i) => (
                         <Marker key={`marker-${i}`} coordinate={{ latitude: formatNumberWithRandomDecimal(marker.location.longitude), longitude: formatNumberWithRandomDecimal(marker.location.latitude) }}

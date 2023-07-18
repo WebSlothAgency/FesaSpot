@@ -2,8 +2,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { EventStorageProvider } from './contexts/EventStorageContext';
 
-import { Text } from 'react-native-svg';
-
 //PAGES
 import Home from './screens/Home';
 import EventDetailPage from './screens/EventDetailPage';
@@ -11,6 +9,7 @@ import EventDetailPage from './screens/EventDetailPage';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 import * as Linking from 'expo-linking';
+import Settings from './screens/HomeTabs/Settings';
 
 const client = new ApolloClient({
   uri: 'https://us-east-1-shared-usea1-02.cdn.hygraph.com/content/clhvznxbz10sb01tbempl16ux/master',
@@ -55,6 +54,7 @@ export default function App() {
             />
 
             <Stack.Screen name="Event" component={EventDetailPage} options={{ headerShown: false }} />
+            <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
       </EventStorageProvider>
