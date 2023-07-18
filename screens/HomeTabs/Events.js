@@ -4,8 +4,8 @@ import Event from '../../components/Event'
 
 import { useQuery } from '@apollo/client';
 import { gql } from "@apollo/client";
-// import { BannerAd } from 'react-native-google-mobile-ads';
-// import { BannerAdSize } from 'react-native-google-mobile-ads/src';
+import { BannerAd } from 'react-native-google-mobile-ads';
+import { BannerAdSize } from 'react-native-google-mobile-ads/src';
 
 
 const currentDate = new Date();
@@ -107,13 +107,13 @@ export const Events = () => {
                             })}
 
                             <View className="flex flex-row justify-center mt-2.5">
-                                {/* <BannerAd className="bg-white"
+                                <BannerAd className="bg-white"
                                     unitId={adUnitId}
                                     size={BannerAdSize.BANNER}
                                     requestOptions={{
                                         requestNonPersonalizedAdsOnly: true,
                                     }}
-                                /> */}
+                                />
                             </View>
                         </View>
                     )
