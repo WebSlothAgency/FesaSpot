@@ -92,7 +92,6 @@ export default function EventDetailPage({ route }) {
 
 
     function addNotifications() {
-        schedulePushNotification(eventData.startDate, 1, "FesaSpot", `${eventData.title} begint over 1 dag!`)
         schedulePushNotification(eventData.startDate, 3, "FesaSpot", `${eventData.title} begint over 3 dagen!`)
         schedulePushNotification(eventData.startDate, 7, "FesaSpot", `${eventData.title} begint over 7 dagen!`)
     }
