@@ -111,7 +111,7 @@ export const Events = () => {
                                     unitId={adUnitId}
                                     size={BannerAdSize.BANNER}
                                     requestOptions={{
-                                        requestNonPersonalizedAdsOnly: true,
+                                        requestNonPersonalizedAdsOnly: false,
                                     }}
                                 />
                             </View>

@@ -176,7 +176,7 @@ const Settings = () => {
 
                 <View className="flex flex-col w-full items-center mt-16">
                     <Text className="text-gray-700 font-normal">v{Constants.manifest.version}</Text>
-                    <TouchableOpacity onPress={() => openWebsite("https://www.websloth.agency")}><Text className="text-gray-700 font-normal mt-1">Ontwikkeld door WebSloth</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => openWebsite("https://www.websloth.agency/?ref=FesaSpot")}><Text className="text-gray-700 font-normal mt-1">Ontwikkeld door WebSloth</Text></TouchableOpacity>
                     <Text className="text-gray-700 font-normal mt-1">FesaSpot © 2023. Alle rechten voorbehouden.</Text>
                 </View>
             </View>}

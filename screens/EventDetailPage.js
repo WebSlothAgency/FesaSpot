@@ -292,7 +292,7 @@ export default function EventDetailPage({ route }) {
                                 unitId={adUnitId}
                                 size={BannerAdSize.LARGE_BANNER}
                                 requestOptions={{
-                                    requestNonPersonalizedAdsOnly: true,
+                                    requestNonPersonalizedAdsOnly: false,
                                 }}
                             />
                         </View>
@@ -409,7 +409,7 @@ export default function EventDetailPage({ route }) {
                                 unitId={adUnitId}
                                 size={BannerAdSize.BANNER}
                                 requestOptions={{
-                                    requestNonPersonalizedAdsOnly: true,
+                                    requestNonPersonalizedAdsOnly: false,
                                 }}
                             />
                         </View>
